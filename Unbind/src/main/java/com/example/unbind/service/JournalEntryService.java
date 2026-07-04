@@ -1,5 +1,7 @@
 package com.example.unbind.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.unbind.domain.JournalEntry;
@@ -23,5 +25,10 @@ public class JournalEntryService {
 		
 		return mapper.findById(id);
 	}
+
+	public List<JournalEntry> getAll() {
+		return mapper.getAll();
+	}
+
 
 }

@@ -18,5 +18,11 @@
     	FROM journal_entry
     	WHERE id = #{id}
     </select>
+    
+    <select id="getAll">
+    	SELECT id, situation_text, created_at
+    	FROM journal_entry
+    	ORDER BY created_at DESC
+    </select>
 
 </mapper>
