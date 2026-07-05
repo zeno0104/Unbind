@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.unbind.mapper.UserMapper">
+	<insert id="insert" parameterType="com.example.unbind.domain.User">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT user_seq.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO USERS (id, email, password, name, created_at)
+		VALUES (#{id}, #{email}, #{password}, #{name}, CURRENT_TIMESTAMP)
+	</insert>
+	<select id="findByEmail" parameterType="String" resultType="com.example.unbind.domain.User">
+		SELECT id, email, password, name, created_at
+		FROM USERS
+		WHERE email = #{email}
+	</select>
+</mapper>
