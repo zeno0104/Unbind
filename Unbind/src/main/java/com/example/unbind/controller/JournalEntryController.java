@@ -2,6 +2,7 @@ package com.example.unbind.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,17 +22,19 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = "http://localhost:5173")
 public class JournalEntryController {
 	private final JournalEntryService service;
-	
+
 	@PostMapping
-	public JournalEntry create(@RequestBody JournalEntry entry) {
-		return service.create(entry);
+	public JournalEntry create(@RequestBody JournalEntry entry, Authentication authentication) {
+		String email = authentication.getName();
+		return service.create(entry, email);
 	}
 
 	@GetMapping
-	public List<JournalEntry> getAll() {
-		return service.getAll();
+	public List<JournalEntry> getAll(Authentication authentication) {
+		String email = authentication.getName();
+		return service.getAll(email);
 	}
-	
+
 	@GetMapping("/{id}")
 	public JournalEntry get(@PathVariable("id") Long id) {
 		return service.get(id);

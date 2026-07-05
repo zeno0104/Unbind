@@ -4,25 +4,32 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.unbind.mapper.JournalEntryMapper">
 
-    <!-- 여기에 insert, select 쿼리 작성 -->
-    <insert id="insert" parameterType="com.example.unbind.domain.JournalEntry">
-    	<selectKey keyProperty="id" resultType="long" order="BEFORE">
-    		SELECT journal_entry_seq.NEXTVAL FROM dual
-    	</selectKey>
-    	INSERT INTO journal_entry (id, situation_text, created_at)
-    	VALUES (#{id}, #{situationText}, CURRENT_TIMESTAMP)
-    </insert>
-    
-    <select id="findById" parameterType="long" resultType="com.example.unbind.domain.JournalEntry">
-    	SELECT id, situation_text, created_at
-    	FROM journal_entry
-    	WHERE id = #{id}
-    </select>
-    
-    <select id="getAll">
-    	SELECT id, situation_text, created_at
-    	FROM journal_entry
-    	ORDER BY created_at DESC
-    </select>
+	<!-- 여기에 insert, select 쿼리 작성 -->
+	<insert id="insert"
+		parameterType="com.example.unbind.domain.JournalEntry">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT
+			journal_entry_seq.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO journal_entry (id, situation_text, created_at, user_id)
+		VALUES (#{id}, #{situationText}, CURRENT_TIMESTAMP, #{userId})
+	</insert>
+
+	<select id="findById" parameterType="long"
+		resultType="com.example.unbind.domain.JournalEntry">
+		SELECT id, situation_text, created_at
+		FROM journal_entry
+		WHERE id = #{id}
+	</select>
+
+
+	<select id="findAllByUserId" parameterType="long"
+		resultType="com.example.unbind.domain.JournalEntry">
+		SELECT id, situation_text, created_at, user_id
+		FROM
+		journal_entry
+		WHERE user_id = #{userId}
+		ORDER BY created_at DESC
+	</select>
 
 </mapper>
