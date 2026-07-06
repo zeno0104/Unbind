@@ -1,0 +1,8 @@
+.container {
+  display: flex;
+  background-color: #1a1a19;
+}
+.content {
+  flex: 1;
+  padding: 24px 32px;
+}
