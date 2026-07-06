@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.example.unbind.mapper.ConversationTurnMapper">
+
+	<insert id="insert"
+		parameterType="com.example.unbind.domain.ConversationTurn">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT conversation_turn_seq.NEXTVAL FROM dual
+		</selectKey>
+		INSERT INTO conversation_turn (id, entry_id, role, content, step_type,
+		turn_order)
+		VALUES (#{id}, #{entryId}, #{role}, #{content}, #{stepType}, #{turnOrder})
+	</insert>
+
+	<select id="findByEntryId" parameterType="long"
+		resultType="com.example.unbind.domain.ConversationTurn">
+		SELECT id, entry_id, role, content, step_type, turn_order
+		FROM conversation_turn
+		WHERE entry_id = #{entryId}
+		ORDER BY turn_order
+	</select>
+
+	<update id="updateStepType">
+		UPDATE conversation_turn
+		SET step_type = #{stepType}
+		WHERE id = #{id}
+	</update>
+
+</mapper>
