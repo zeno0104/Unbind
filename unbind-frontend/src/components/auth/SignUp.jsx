@@ -1,22 +1,27 @@
 import React, { useState } from "react";
-import styles from "../auth/Login.module.css";
+import { useNavigate } from "react-router-dom";
+import styles from "./Login.module.css";
 import axios from "../../api/axiosInstance";
-import { Link } from "react-router-dom";
 
-export const Login = ({ onLoginSuccess }) => {
+export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
     try {
-      const response = await axios.post("/auth/login", { email, password });
-      onLoginSuccess(response.data);
+      await axios.post("/auth/signup", { email, password, name });
+      alert("회원가입이 완료됐습니다. 로그인해주세요.");
+      navigate("/login");
     } catch (err) {
-      setErrorMsg("이메일 또는 비밀번호가 올바르지 않습니다.");
+      setErrorMsg("회원가입에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -29,8 +34,18 @@ export const Login = ({ onLoginSuccess }) => {
             <p className={styles.titleTextInfo}>내려놓고, 나에게 집중하기</p>
           </div>
         </div>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSignUp}>
           <div className={styles.login}>
+            <div className={styles.email}>
+              <label htmlFor="name">이름</label>
+              <input
+                type="text"
+                id="name"
+                placeholder="이름 입력"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
             <div className={styles.email}>
               <label htmlFor="email">이메일</label>
               <input
@@ -54,12 +69,18 @@ export const Login = ({ onLoginSuccess }) => {
           </div>
           {errorMsg && <p className={styles.errorText}>{errorMsg}</p>}
           <button type="submit" className={styles.loginBtn}>
-            로그인
+            회원가입
           </button>
         </form>
         <div className={styles.signUpText}>
           <p>
-            계정이 없으신가요? <Link to={"/signup"}>회원가입</Link>
+            이미 계정이 있으신가요?{" "}
+            <span
+              onClick={() => navigate("/login")}
+              style={{ cursor: "pointer" }}
+            >
+              로그인
+            </span>
           </p>
         </div>
       </div>

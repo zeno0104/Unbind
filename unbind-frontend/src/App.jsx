@@ -1,46 +1,42 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { Login } from "./components/auth/Login";
-import axios from "./api/axiosInstance";
+import { SignUp } from "./components/auth/SignUp";
+import { Home } from "./components/Home";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [entries, setEntries] = useState([]);
-  const [text, setText] = useState("");
 
   const handleLoginSuccess = (newToken) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
   };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);
-    setEntries([]);
   };
 
-  const getAllEntries = async () => {
-    const response = await axios.get("/entries");
-    setEntries(response.data);
-  };
-
-  useEffect(() => {
-    console.log(`token = ${token}`);
-    if (token) {
-      getAllEntries();
-    }
-  }, [token]);
-
-  if (!token) {
-    return <Login onLoginSuccess={handleLoginSuccess} />;
-  }
   return (
-    <div>
-      <button onClick={handleLogout}>로그아웃</button>
-      <ul>
-        {entries.map((item) => (
-          <li key={item.id}>{item.situationText}</li>
-        ))}
-      </ul>
-    </div>
+    <Routes>
+      <Route
+        path="/login"
+        element={
+          token ? (
+            <Navigate to="/" />
+          ) : (
+            <Login onLoginSuccess={handleLoginSuccess} />
+          )
+        }
+      />
+      <Route path="/signup" element={<SignUp />} />
+      <Route
+        path="/"
+        element={
+          token ? <Home onLogout={handleLogout} /> : <Navigate to="/login" />
+        }
+      />
+    </Routes>
   );
 }
 
