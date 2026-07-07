@@ -8,16 +8,15 @@
 	<insert id="insert"
 		parameterType="com.example.unbind.domain.JournalEntry">
 		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-			SELECT
-			journal_entry_seq.NEXTVAL FROM dual
+			SELECT nextval('journal_entry_seq')
 		</selectKey>
-		INSERT INTO journal_entry (id, situation_text, created_at, user_id)
-		VALUES (#{id}, #{situationText}, CURRENT_TIMESTAMP, #{userId})
+		INSERT INTO journal_entry (id, situation_text, created_at, user_id, relationship_tag)
+		VALUES (#{id}, #{situationText}, CURRENT_TIMESTAMP, #{userId}, #{relationshipTag, jdbcType=VARCHAR})
 	</insert>
 
 	<select id="findById" parameterType="long"
 		resultType="com.example.unbind.domain.JournalEntry">
-		SELECT id, situation_text, created_at
+		SELECT id, situation_text, created_at, user_id, relationship_tag
 		FROM journal_entry
 		WHERE id = #{id}
 	</select>
@@ -25,11 +24,20 @@
 
 	<select id="findAllByUserId" parameterType="long"
 		resultType="com.example.unbind.domain.JournalEntry">
-		SELECT id, situation_text, created_at, user_id
+		SELECT id, situation_text, created_at, user_id, relationship_tag
 		FROM
 		journal_entry
 		WHERE user_id = #{userId}
 		ORDER BY created_at DESC
+	</select>
+
+	<select id="findDistinctTagsByUserId" parameterType="long"
+		resultType="string">
+		SELECT DISTINCT relationship_tag
+		FROM journal_entry
+		WHERE user_id = #{userId}
+		AND relationship_tag IS NOT NULL
+		ORDER BY relationship_tag
 	</select>
 
 </mapper>

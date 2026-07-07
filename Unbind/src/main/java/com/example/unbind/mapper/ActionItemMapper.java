@@ -3,6 +3,8 @@ package com.example.unbind.mapper;
 import com.example.unbind.domain.ActionItem;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -15,4 +17,6 @@ public interface ActionItemMapper {
 			@Param("feedback") String feedback);
 
 	Map<String, Object> countStats(Long userId);
+
+	List<ActionItem> findAllByUserId(Long userId);
 }

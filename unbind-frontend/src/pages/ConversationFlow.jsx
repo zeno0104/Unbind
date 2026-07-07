@@ -77,7 +77,14 @@ export const ConversationFlow = () => {
     }
   };
 
-  const handlePickOption = (text) => {
+  const handlePickOption = (opt) => {
+    const composed = `${opt.trigger} → 나는 ${opt.action}`;
+    setSelectedText(composed);
+    setFinalText(composed);
+  };
+
+  const handlePickCustom = (text) => {
+    if (!text.trim()) return;
     setSelectedText(text);
     setFinalText(text);
   };
@@ -156,16 +163,17 @@ export const ConversationFlow = () => {
       <div className={styles.center}>
         <div key={fadeKey} className={styles.fadeIn}>
           <p className={styles.smallLabel}>
-            오늘, 무엇을 다시 쥐어보고 싶으세요?
+            다음에 이 상황이 다시 오면, 나는 무엇을 하고 싶으세요?
           </p>
           <div className={styles.optionList}>
             {options.map((opt, idx) => (
               <div
                 key={idx}
                 className={styles.optionItem}
-                onClick={() => handlePickOption(opt.text)}
+                onClick={() => handlePickOption(opt)}
               >
-                <p className={styles.optionText}>{opt.text}</p>
+                <p className={styles.optionTrigger}>{opt.trigger}</p>
+                <p className={styles.optionText}>나는 {opt.action}</p>
                 <p className={styles.optionReason}>{opt.reason}</p>
               </div>
             ))}
@@ -176,7 +184,7 @@ export const ConversationFlow = () => {
               className={styles.customInput}
               placeholder="직접 적어볼게요"
               onKeyDown={(e) =>
-                e.key === "Enter" && handlePickOption(e.target.value)
+                e.key === "Enter" && handlePickCustom(e.target.value)
               }
             />
           </div>

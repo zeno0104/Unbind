@@ -10,6 +10,7 @@ export const JournalDetail = () => {
   const [turns, setTurns] = useState([]);
   const [actionItem, setActionItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [pickingFeedback, setPickingFeedback] = useState(false);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -30,9 +31,10 @@ export const JournalDetail = () => {
     fetchDetail();
   }, [entryId]);
 
-  const handleComplete = async () => {
-    await axios.patch(`/entries/${entryId}/action-item/complete`);
-    setActionItem({ ...actionItem, isCompleted: 1 });
+  const handleComplete = async (feedback) => {
+    await axios.patch(`/entries/${entryId}/action-item/complete`, { feedback });
+    setActionItem({ ...actionItem, isCompleted: 1, feedback });
+    setPickingFeedback(false);
   };
 
   if (loading) {
@@ -78,10 +80,31 @@ export const JournalDetail = () => {
                 <p className={styles.actionText}>{actionItem.content}</p>
                 {actionItem.isCompleted === 1 ? (
                   <p className={styles.doneLabel}>✓ 완료했어요</p>
+                ) : pickingFeedback ? (
+                  <div className={styles.feedbackRow}>
+                    <button
+                      className={styles.feedbackBtn}
+                      onClick={() => handleComplete("GOOD")}
+                    >
+                      도움됐어요
+                    </button>
+                    <button
+                      className={styles.feedbackBtn}
+                      onClick={() => handleComplete("NEUTRAL")}
+                    >
+                      그저그랬어요
+                    </button>
+                    <button
+                      className={styles.feedbackBtn}
+                      onClick={() => handleComplete("HARD")}
+                    >
+                      안맞았어요
+                    </button>
+                  </div>
                 ) : (
                   <button
                     className={styles.completeBtn}
-                    onClick={handleComplete}
+                    onClick={() => setPickingFeedback(true)}
                   >
                     완료 체크하기
                   </button>

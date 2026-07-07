@@ -5,14 +5,18 @@
 <mapper namespace="com.example.unbind.mapper.UserMapper">
 	<insert id="insert" parameterType="com.example.unbind.domain.User">
 		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-			SELECT user_seq.NEXTVAL FROM dual
+			SELECT nextval('user_seq')
 		</selectKey>
-		INSERT INTO USERS (id, email, password, name, created_at)
+		INSERT INTO users (id, email, password, name, created_at)
 		VALUES (#{id}, #{email}, #{password}, #{name}, CURRENT_TIMESTAMP)
 	</insert>
 	<select id="findByEmail" parameterType="String" resultType="com.example.unbind.domain.User">
-		SELECT id, email, password, name, created_at
-		FROM USERS
+		SELECT id, email, password, name, created_at, is_pro
+		FROM users
 		WHERE email = #{email}
 	</select>
+
+	<update id="updateIsPro">
+		UPDATE users SET is_pro = #{isPro} WHERE id = #{id}
+	</update>
 </mapper>

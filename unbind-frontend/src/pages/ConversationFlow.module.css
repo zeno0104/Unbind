@@ -1,19 +1,19 @@
 .center {
   min-height: 100vh;
   width: 100%;
-  background: #1a1a1a;
+  background: var(--bg-base);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
   box-sizing: border-box;
-  color: #e8e8e4;
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
 .smallLabel {
   font-size: 12px;
-  color: #6a6a66;
+  color: var(--text-muted);
 }
 .quote {
   font-size: 20px;
@@ -24,14 +24,14 @@
 .divider {
   width: 32px;
   height: 0.5px;
-  background: #4a4a46;
+  background: var(--border-soft);
 }
 
 .breathCircle {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 1px solid #5dcaa5;
+  border: 1px solid var(--accent-sage);
   animation: breathe 3s ease-in-out infinite;
 }
 @keyframes breathe {
@@ -48,16 +48,16 @@
 
 .ghostBtn {
   background: transparent;
-  border: 0.5px solid #4a4a46;
-  color: #8a8a86;
+  border: 0.5px solid var(--border-soft);
+  color: var(--text-secondary);
   padding: 10px 24px;
   font-size: 13px;
   cursor: pointer;
   border-radius: 8px;
 }
 .primaryBtn {
-  background: #5dcaa5;
-  color: #04342c;
+  background: var(--accent-sage);
+  color: #0c1a15;
   border: none;
   padding: 10px 24px;
   font-size: 13px;
@@ -73,14 +73,22 @@
   max-width: 440px;
 }
 .optionItem {
-  background: #2c2c2a;
-  border: 0.5px solid #444;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
   border-radius: 10px;
   padding: 14px 16px;
   cursor: pointer;
 }
 .optionItem:hover {
-  border-color: #5dcaa5;
+  border-color: var(--accent-warm);
+}
+.optionTrigger {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0 0 6px;
+}
+.optionTrigger::before {
+  content: "만약 ";
 }
 .optionText {
   font-size: 14px;
@@ -88,7 +96,7 @@
 }
 .optionReason {
   font-size: 12px;
-  color: #8a8a86;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -99,11 +107,11 @@
 .customInput {
   width: 100%;
   box-sizing: border-box;
-  background: #2c2c2a;
-  border: 0.5px solid #444;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
   border-radius: 8px;
   padding: 10px 12px;
-  color: #e8e8e4;
+  color: var(--text-primary);
   font-size: 13px;
 }
 
@@ -111,21 +119,21 @@
   width: 100%;
   max-width: 440px;
   box-sizing: border-box;
-  background: #2c2c2a;
-  border: 0.5px solid #444;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
   border-radius: 10px;
   padding: 14px;
-  color: #e8e8e4;
+  color: var(--text-primary);
   font-size: 14px;
   resize: none;
 }
 
 .chatWrap {
   min-height: 100vh;
-  background: #1a1a1a;
+  background: var(--bg-base);
   display: flex;
   flex-direction: column;
-  color: #e8e8e4;
+  color: var(--text-primary);
   box-sizing: border-box;
   padding: 20px;
   max-width: 640px;
@@ -143,7 +151,7 @@
 .aiBubble {
   align-self: flex-start;
   max-width: 85%;
-  background: #2c2c2a;
+  background: var(--bg-surface-2);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 14px;
@@ -152,8 +160,8 @@
 .userBubble {
   align-self: flex-end;
   max-width: 85%;
-  background: #3a5f52;
-  color: #e8f5ee;
+  background: var(--accent-sage-deep);
+  color: var(--text-primary);
   border-radius: 12px;
   padding: 12px 16px;
   font-size: 14px;
@@ -168,16 +176,16 @@
 .chatInput {
   flex: 1;
   min-width: 0;
-  background: #2c2c2a;
-  border: 0.5px solid #444;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
   border-radius: 8px;
   padding: 12px 14px;
-  color: #e8e8e4;
+  color: var(--text-primary);
   font-size: 14px;
 }
 .sendBtn {
-  background: #5dcaa5;
-  color: #04342c;
+  background: var(--accent-sage);
+  color: #0c1a15;
   border: none;
   padding: 0 18px;
   border-radius: 8px;
@@ -209,7 +217,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #4a4a46;
+  background: var(--border-soft);
 }
 
 .answerBox {
@@ -226,11 +234,11 @@
   min-width: 0;
   width: 100%;
   box-sizing: border-box;
-  background: #2c2c2a;
-  border: 0.5px solid #444;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
   border-radius: 10px;
   padding: 12px 14px;
-  color: #e8e8e4;
+  color: var(--text-primary);
   font-size: 14px;
   font-family: inherit;
   resize: none;
@@ -240,8 +248,8 @@
 }
 
 .answerBtn {
-  background: #5dcaa5;
-  color: #04342c;
+  background: var(--accent-sage);
+  color: #0c1a15;
   border: none;
   padding: 12px 18px;
   border-radius: 10px;
@@ -256,7 +264,7 @@
 
 .sendingHint {
   font-size: 12px;
-  color: #6a6a66;
+  color: var(--text-muted);
   margin-top: 10px;
 }
 .fadeIn {
@@ -279,7 +287,7 @@
 }
 .hintText {
   font-size: 12px;
-  color: #6a6a66;
+  color: var(--text-muted);
   margin-top: -8px;
 }
 

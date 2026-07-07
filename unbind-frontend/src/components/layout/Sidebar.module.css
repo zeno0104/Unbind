@@ -47,6 +47,17 @@
   color: var(--accent-sage);
 }
 
+.bottom {
+  display: flex;
+  flex-direction: column;
+}
+
+.divider {
+  height: 0.5px;
+  background: var(--border-soft);
+  margin: 0 12px 12px;
+}
+
 .logoutBtn {
   background: transparent;
   border: none;
@@ -81,9 +92,22 @@
     display: none;
   }
   .navItem {
-    padding: 6px 14px;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  .bottom {
+    position: fixed;
+    top: 14px;
+    right: 14px;
+    z-index: 60;
+  }
+  .divider {
+    display: none;
   }
   .logoutBtn {
-    padding: 6px 14px;
+    background: var(--bg-surface);
+    border: 0.5px solid var(--border-soft);
+    border-radius: 999px;
+    padding: 6px 16px;
   }
 }

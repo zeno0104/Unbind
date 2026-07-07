@@ -5,6 +5,10 @@ import { SignUp } from "./components/auth/SignUp";
 import { Home } from "./components/Home";
 import { ConversationFlow } from "./pages/ConversationFlow";
 import { JournalDetail } from "./pages/JournalDetail";
+import { KnotRoom } from "./pages/KnotRoom";
+import { PatternInsight } from "./pages/PatternInsight";
+import { Calendar } from "./pages/Calendar";
+import { RelationshipReport } from "./pages/RelationshipReport";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -45,6 +49,22 @@ function App() {
       <Route
         path="/entries/:entryId/detail"
         element={token ? <JournalDetail /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/room"
+        element={token ? <KnotRoom /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/insights"
+        element={token ? <PatternInsight /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/calendar"
+        element={token ? <Calendar /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/relationships"
+        element={token ? <RelationshipReport /> : <Navigate to="/login" />}
       />
     </Routes>
   );

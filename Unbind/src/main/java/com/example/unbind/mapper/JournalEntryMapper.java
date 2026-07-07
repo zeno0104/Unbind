@@ -14,4 +14,6 @@ public interface JournalEntryMapper {
 	JournalEntry findById(Long id);
 
 	List<JournalEntry> findAllByUserId(Long userId);
+
+	List<String> findDistinctTagsByUserId(Long userId);
 }

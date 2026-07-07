@@ -36,4 +36,9 @@ public class JournalEntryService {
 		return mapper.findAllByUserId(user.getId());
 	}
 
+	public List<String> getTags(String email) {
+		User user = userMapper.findByEmail(email);
+		return mapper.findDistinctTagsByUserId(user.getId());
+	}
+
 }

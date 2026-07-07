@@ -8,8 +8,7 @@
 	<insert id="insert"
 		parameterType="com.example.unbind.domain.ConversationTurn">
 		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-			SELECT
-			conversation_turn_seq.NEXTVAL FROM dual
+			SELECT nextval('conversation_turn_seq')
 		</selectKey>
 		INSERT INTO conversation_turn (id, entry_id, role, content, step_type,
 		turn_order)

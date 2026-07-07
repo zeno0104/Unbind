@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class ActionOption {
-	private String text;
+	private String trigger;
+	private String action;
 	private String reason;
 }

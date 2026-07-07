@@ -24,6 +24,9 @@ export const JournalList = ({ entries, onSelect }) => {
               onClick={() => onSelect(item.id)}
             >
               <span className={styles.date}>{formatDate(item.createdAt)}</span>
+              {item.relationshipTag && (
+                <span className={styles.tag}>{item.relationshipTag}</span>
+              )}
               <span className={styles.text}>{item.situationText}</span>
             </div>
           ))

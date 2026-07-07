@@ -1,0 +1,145 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-base);
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  box-sizing: border-box;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.heroTitle {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.heroSub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+.status {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card {
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+
+.cardHeader {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.tagName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stats {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.feedbackRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.fbGood,
+.fbNeutral,
+.fbHard {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.fbGood {
+  color: var(--accent-sage);
+  background: var(--accent-sage-deep);
+}
+
+.fbNeutral {
+  color: var(--text-secondary);
+  background: var(--bg-base);
+}
+
+.fbHard {
+  color: var(--accent-warm);
+  background: var(--accent-warm-deep);
+}
+
+.insight {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 0.5px solid var(--border-soft);
+}
+
+.timeline {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 0.5px solid var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 14px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.timelineDate {
+  color: var(--text-muted);
+  width: 32px;
+  flex-shrink: 0;
+}
+
+.timelineText {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px 90px;
+  }
+}

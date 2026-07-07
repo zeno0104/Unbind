@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(59, 42, 34, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,7 +11,7 @@
 }
 
 .modal {
-  background: #232321;
+  background: var(--bg-surface);
   border-radius: 16px;
   padding: 32px;
   max-width: 520px;
@@ -19,7 +19,7 @@
   max-height: 80vh;
   overflow-y: auto;
   position: relative;
-  color: #e8e8e4;
+  color: var(--text-primary);
   box-sizing: border-box;
   animation: fadeUp 0.3s ease;
 }
@@ -41,14 +41,14 @@
   right: 16px;
   background: transparent;
   border: none;
-  color: #8a8a86;
+  color: var(--text-muted);
   font-size: 16px;
   cursor: pointer;
 }
 
 .label {
   font-size: 12px;
-  color: #8a8a86;
+  color: var(--text-muted);
   margin: 0 0 12px;
 }
 
@@ -67,15 +67,15 @@
   line-height: 1.5;
 }
 .aiTurn {
-  background: #2c2c2a;
+  background: var(--bg-surface-2);
 }
 .userTurn {
-  background: #3a5f52;
-  color: #e8f5ee;
+  background: var(--accent-sage-deep);
+  color: var(--text-primary);
 }
 
 .actionBox {
-  background: #2c2c2a;
+  background: var(--bg-surface-2);
   border-radius: 12px;
   padding: 16px;
 }
@@ -85,8 +85,8 @@
   line-height: 1.6;
 }
 .completeBtn {
-  background: #5dcaa5;
-  color: #04342c;
+  background: var(--accent-sage);
+  color: #0c1a15;
   border: none;
   padding: 8px 16px;
   font-size: 13px;
@@ -94,7 +94,7 @@
   cursor: pointer;
 }
 .doneLabel {
-  color: #5dcaa5;
+  color: var(--accent-sage);
   font-size: 13px;
   margin: 0;
 }
@@ -104,8 +104,8 @@
   padding: 40px 0;
 }
 .startBtn {
-  background: #5dcaa5;
-  color: #04342c;
+  background: var(--accent-sage);
+  color: #0c1a15;
   border: none;
   padding: 10px 24px;
   font-size: 14px;
@@ -115,7 +115,7 @@
 }
 .loadingText {
   text-align: center;
-  color: #8a8a86;
+  color: var(--text-muted);
   padding: 40px 0;
 }
 .feedbackRow {

@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-base);
+}
+
+.content {
+  flex: 1;
+  padding: 40px;
+  box-sizing: border-box;
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.heroTitle {
+  font-size: 22px;
+  color: var(--text-primary);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.heroSub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+.status {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.cardTitle {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.cardDesc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.card.locked .cardTitle,
+.card.locked .cardDesc {
+  filter: blur(5px);
+  user-select: none;
+}
+
+.lockOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.subscribeBtn {
+  background: #d9a26c;
+  color: #2c1c0e;
+  border: none;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px 90px;
+  }
+}

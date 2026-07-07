@@ -4,13 +4,13 @@
 
 .label {
   font-size: 13px;
-  color: #7a7a76;
+  color: var(--text-muted);
   margin: 0 0 10px;
 }
 
 .box {
-  background: #232321;
-  border: 0.5px solid #3a3a38;
+  background: var(--bg-surface-2);
+  border: 0.5px solid var(--border-soft);
   border-radius: 14px;
   padding: 18px;
 }
@@ -21,7 +21,7 @@
   resize: none;
   font-size: 14px;
   background: transparent;
-  color: #e8e8e4;
+  color: var(--text-primary);
   box-sizing: border-box;
   padding: 0;
   font-family: inherit;
@@ -29,7 +29,28 @@
 }
 
 .textarea::placeholder {
-  color: #5a5a56;
+  color: var(--text-muted);
+}
+
+.tagInput {
+  width: 100%;
+  border: none;
+  border-top: 0.5px solid var(--border-soft);
+  background: transparent;
+  color: var(--text-primary);
+  box-sizing: border-box;
+  padding: 10px 0 0;
+  margin-top: 10px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.tagInput::placeholder {
+  color: var(--text-muted);
+}
+
+.tagInput:focus {
+  outline: none;
 }
 
 .btnRow {
@@ -39,8 +60,8 @@
 }
 
 .submitBtn {
-  background: #5dcaa5;
-  color: #04342c;
+  background: var(--accent-sage);
+  color: #0c1a15;
   border: none;
   padding: 9px 22px;
   font-size: 13px;

@@ -6,6 +6,7 @@ import { JournalList } from "./journal/JournalList";
 import { JournalDetailModal } from "./journal/JournalDetailModal";
 import { Sidebar } from "./layout/Sidebar";
 import { WarmthGauge } from "./WarmthGauge";
+import { KnotReminder } from "./KnotReminder";
 import styles from "./Home.module.css";
 
 export const Home = ({ onLogout }) => {
@@ -37,6 +38,7 @@ export const Home = ({ onLogout }) => {
           </p>
         </div>
 
+        <KnotReminder />
         <WarmthGauge />
         <JournalForm onSubmitSuccess={handleNewEntry} />
         <JournalList entries={entries} onSelect={setSelectedId} />

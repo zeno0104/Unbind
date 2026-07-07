@@ -30,3 +30,7 @@ build/
 ### API 키 보호 ###
 application.properties
 src/main/resources/application.properties
+.env
+.env.prod
+.env.production
+unbind-frontend/.env.production

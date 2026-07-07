@@ -10,7 +10,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/stats")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class StatsController {
 	private final StatsService statsService;
 	private final UserMapper userMapper;

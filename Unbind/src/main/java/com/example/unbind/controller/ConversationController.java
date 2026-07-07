@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/entries")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class ConversationController {
 
 	private final ConversationService conversationService;

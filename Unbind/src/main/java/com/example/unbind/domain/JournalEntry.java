@@ -13,4 +13,5 @@ public class JournalEntry {
 	private String situationText;
 	private LocalDateTime createdAt;
 	private Long userId;
+	private String relationshipTag;
 }

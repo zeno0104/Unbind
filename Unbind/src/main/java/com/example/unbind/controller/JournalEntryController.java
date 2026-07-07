@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/entries")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class JournalEntryController {
 	private final JournalEntryService service;
 
@@ -38,5 +37,10 @@ public class JournalEntryController {
 	@GetMapping("/{id}")
 	public JournalEntry get(@PathVariable("id") Long id) {
 		return service.get(id);
+	}
+
+	@GetMapping("/tags")
+	public List<String> getTags(Authentication authentication) {
+		return service.getTags(authentication.getName());
 	}
 }
