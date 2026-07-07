@@ -4,13 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.unbind.mapper.ActionItemMapper">
 
-	<insert id="insert"
-		parameterType="com.example.unbind.domain.ActionItem">
-		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-			SELECT action_item_seq.NEXTVAL FROM dual
-		</selectKey>
-		INSERT INTO action_item (id, entry_id, content, is_completed)
-		VALUES (#{id}, #{entryId}, #{content}, 0)
-	</insert>
+    <insert id="insert" parameterType="com.example.unbind.domain.ActionItem">
+        <selectKey keyProperty="id" resultType="long" order="BEFORE">
+            SELECT action_item_seq.NEXTVAL FROM dual
+        </selectKey>
+        INSERT INTO action_item (id, entry_id, content, is_completed)
+        VALUES (#{id}, #{entryId}, #{content}, 0)
+    </insert>
+
+    <select id="findByEntryId" parameterType="long" resultType="com.example.unbind.domain.ActionItem">
+        SELECT id, entry_id, content, is_completed, feedback
+        FROM action_item
+        WHERE entry_id = #{entryId}
+    </select>
+
+    <update id="updateCompleted">
+        UPDATE action_item
+        SET is_completed = #{isCompleted}, feedback = #{feedback, jdbcType=VARCHAR}
+        WHERE entry_id = #{entryId}
+    </update>
+
+    <select id="countStats" resultType="map">
+        SELECT
+            COUNT(*) AS total,
+            SUM(CASE WHEN is_completed = 1 THEN 1 ELSE 0 END) AS completed,
+            SUM(CASE WHEN feedback = 'GOOD' THEN 1 ELSE 0 END) AS good
+        FROM action_item
+        WHERE entry_id IN (SELECT id FROM journal_entry WHERE user_id = #{userId})
+    </select>
 
 </mapper>

@@ -8,11 +8,13 @@
 	<insert id="insert"
 		parameterType="com.example.unbind.domain.ConversationTurn">
 		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-			SELECT conversation_turn_seq.NEXTVAL FROM dual
+			SELECT
+			conversation_turn_seq.NEXTVAL FROM dual
 		</selectKey>
 		INSERT INTO conversation_turn (id, entry_id, role, content, step_type,
 		turn_order)
-		VALUES (#{id}, #{entryId}, #{role}, #{content}, #{stepType}, #{turnOrder})
+		VALUES (#{id}, #{entryId}, #{role}, #{content}, #{stepType,
+		jdbcType=VARCHAR}, #{turnOrder})
 	</insert>
 
 	<select id="findByEntryId" parameterType="long"

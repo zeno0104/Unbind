@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost",
+  baseURL: "https://olive-parents-cheat.loca.lt",
 });
 
 instance.interceptors.request.use((config) => {

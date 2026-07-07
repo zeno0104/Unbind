@@ -1,0 +1,49 @@
+.container {
+  margin-bottom: 40px;
+}
+
+.label {
+  font-size: 13px;
+  color: #7a7a76;
+  margin: 0 0 10px;
+}
+
+.box {
+  background: #232321;
+  border: 0.5px solid #3a3a38;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  font-size: 14px;
+  background: transparent;
+  color: #e8e8e4;
+  box-sizing: border-box;
+  padding: 0;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+.textarea::placeholder {
+  color: #5a5a56;
+}
+
+.btnRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.submitBtn {
+  background: #5dcaa5;
+  color: #04342c;
+  border: none;
+  padding: 9px 22px;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}

@@ -8,4 +8,5 @@ public class ActionItem {
 	private Long entryId;
 	private String content;
 	private Integer isCompleted;
+	private String feedback;
 }

@@ -1,0 +1,98 @@
+.container {
+  padding: 32px;
+  color: #e8e8e4;
+  max-width: 560px;
+  background: #1a1a1a;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.backBtn {
+  background: transparent;
+  border: none;
+  color: #8a8a86;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.label {
+  font-size: 12px;
+  color: #8a8a86;
+  margin: 0 0 10px;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.turnList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.turnItem {
+  background: #2c2c2a;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.tag {
+  font-size: 10px;
+  color: #5dcaa5;
+  flex-shrink: 0;
+  width: 40px;
+}
+
+.actionSection {
+  margin-top: 20px;
+}
+
+.actionBox {
+  background: #2c2c2a;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.actionText {
+  font-size: 15px;
+  margin: 0 0 12px;
+}
+
+.completeBtn {
+  background: #5dcaa5;
+  color: #04342c;
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.doneLabel {
+  color: #5dcaa5;
+  font-size: 13px;
+  margin: 0;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.startBtn {
+  background: #5dcaa5;
+  color: #04342c;
+  border: none;
+  padding: 10px 24px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 16px;
+}

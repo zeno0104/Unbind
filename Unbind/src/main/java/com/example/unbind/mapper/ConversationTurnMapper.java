@@ -2,6 +2,7 @@ package com.example.unbind.mapper;
 
 import com.example.unbind.domain.ConversationTurn;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
@@ -10,5 +11,5 @@ public interface ConversationTurnMapper {
 
 	List<ConversationTurn> findByEntryId(Long entryId);
 
-	void updateStepType(Long id, String stepType);
+	void updateStepType(@Param("id") Long id, @Param("stepType") String stepType);
 }

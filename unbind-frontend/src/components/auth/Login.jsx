@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../auth/Login.module.css";
+import styles from "./Auth.module.css";
 import axios from "../../api/axiosInstance";
 import { Link } from "react-router-dom";
 
@@ -10,6 +10,7 @@ export const Login = ({ onLoginSuccess }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
     try {
       const response = await axios.post("/auth/login", { email, password });
       onLoginSuccess(response.data);
@@ -17,51 +18,51 @@ export const Login = ({ onLoginSuccess }) => {
       setErrorMsg("이메일 또는 비밀번호가 올바르지 않습니다.");
     }
   };
+
   return (
     <div className={styles.container}>
-      <div className={styles.content}>
-        <div className={styles.title}>
-          <div>
-            <img src="/logo.svg" alt="로고" />
-          </div>
-          <div>
-            <p className={styles.titleText}>Unbind</p>
-            <p className={styles.titleTextInfo}>내려놓고, 나에게 집중하기</p>
-          </div>
+      <div className={styles.card}>
+        <div className={styles.brand}>
+          <img src="/logo.svg" alt="" className={styles.logo} />
+          <p className={styles.brandName}>Unbind</p>
+          <p className={styles.brandSub}>내려놓고, 나에게 집중하기</p>
         </div>
-        <form onSubmit={handleLogin}>
-          <div className={styles.login}>
-            <div className={styles.email}>
-              <label htmlFor="email">이메일</label>
-              <input
-                type="text"
-                id="email"
-                placeholder="name@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className={styles.password}>
-              <label htmlFor="password">비밀번호</label>
-              <input
-                type="password"
-                id="password"
-                placeholder="비밀번호 입력"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+
+        <form className={styles.form} onSubmit={handleLogin}>
+          <div className={styles.field}>
+            <label htmlFor="email">이메일</label>
+            <input
+              type="text"
+              id="email"
+              placeholder="name@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
+          <div className={styles.field}>
+            <label htmlFor="password">비밀번호</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="비밀번호 입력"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
           {errorMsg && <p className={styles.errorText}>{errorMsg}</p>}
-          <button type="submit" className={styles.loginBtn}>
+
+          <button type="submit" className={styles.submitBtn}>
             로그인
           </button>
         </form>
-        <div className={styles.signUpText}>
-          <p>
-            계정이 없으신가요? <Link to={"/signup"}>회원가입</Link>
-          </p>
-        </div>
+
+        <p className={styles.switchText}>
+          계정이 없으신가요?{" "}
+          <Link to="/signup" className={styles.switchLink}>
+            회원가입
+          </Link>
+        </p>
       </div>
     </div>
   );

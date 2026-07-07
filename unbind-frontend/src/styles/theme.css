@@ -1,0 +1,25 @@
+:root {
+  --bg-base: #14171a;
+  --bg-surface: #1c211f;
+  --bg-surface-2: #232a27;
+  --border-soft: #2e3532;
+
+  --text-primary: #ece9e2;
+  --text-secondary: #a3a89f;
+  --text-muted: #6b7169;
+
+  --accent-sage: #7fb59a;
+  --accent-sage-deep: #0f2e24;
+  --accent-warm: #d9a26c;
+  --accent-warm-deep: #3a2a18;
+
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: -apple-system, "Pretendard", "Noto Sans KR", sans-serif;
+}
