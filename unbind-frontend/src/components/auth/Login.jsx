@@ -11,11 +11,22 @@ export const Login = ({ onLoginSuccess }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg("");
+
+    if (!email.trim() || !password.trim()) {
+      setErrorMsg("이메일과 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+
     try {
-      const response = await axios.post("/auth/login", { email, password });
+      const response = await axios.post("/auth/login", {
+        email: email.trim(),
+        password,
+      });
       onLoginSuccess(response.data);
     } catch (err) {
-      setErrorMsg("이메일 또는 비밀번호가 올바르지 않습니다.");
+      setErrorMsg(
+        err.response?.data?.message || "이메일 또는 비밀번호가 올바르지 않습니다."
+      );
     }
   };
 
@@ -32,11 +43,12 @@ export const Login = ({ onLoginSuccess }) => {
           <div className={styles.field}>
             <label htmlFor="email">이메일</label>
             <input
-              type="text"
+              type="email"
               id="email"
               placeholder="name@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className={styles.field}>
@@ -47,6 +59,7 @@ export const Login = ({ onLoginSuccess }) => {
               placeholder="비밀번호 입력"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
 

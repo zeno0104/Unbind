@@ -13,11 +13,31 @@ export const SignUp = () => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     setErrorMsg("");
+
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      setErrorMsg("이름, 이메일, 비밀번호를 모두 입력해주세요.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setErrorMsg("올바른 이메일 형식이 아니에요.");
+      return;
+    }
+    if (password.length < 8) {
+      setErrorMsg("비밀번호는 8자 이상이어야 해요.");
+      return;
+    }
+
     try {
-      await axios.post("/auth/signup", { email, password, name });
+      await axios.post("/auth/signup", {
+        email: email.trim(),
+        password,
+        name: name.trim(),
+      });
       navigate("/login");
     } catch (err) {
-      setErrorMsg("회원가입에 실패했습니다. 다시 시도해주세요.");
+      setErrorMsg(
+        err.response?.data?.message || "회원가입에 실패했습니다. 다시 시도해주세요."
+      );
     }
   };
 
@@ -39,16 +59,18 @@ export const SignUp = () => {
               placeholder="이름 입력"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              required
             />
           </div>
           <div className={styles.field}>
             <label htmlFor="email">이메일</label>
             <input
-              type="text"
+              type="email"
               id="email"
               placeholder="name@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className={styles.field}>
@@ -56,9 +78,11 @@ export const SignUp = () => {
             <input
               type="password"
               id="password"
-              placeholder="비밀번호 입력"
+              placeholder="비밀번호 입력 (8자 이상)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              minLength={8}
+              required
             />
           </div>
 

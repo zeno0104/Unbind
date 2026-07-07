@@ -55,18 +55,20 @@ export const Calendar = () => {
         <div className={styles.header}>
           <button
             className={styles.navBtn}
-            onClick={() =>
-              setWeekStart(new Date(weekStart.getTime() - 7 * DAY_MS))
-            }
+            onClick={() => {
+              setWeekStart(new Date(weekStart.getTime() - 7 * DAY_MS));
+              setSelectedDay(null);
+            }}
           >
             ‹
           </button>
           <p className={styles.monthLabel}>{monthLabel}</p>
           <button
             className={styles.navBtn}
-            onClick={() =>
-              setWeekStart(new Date(weekStart.getTime() + 7 * DAY_MS))
-            }
+            onClick={() => {
+              setWeekStart(new Date(weekStart.getTime() + 7 * DAY_MS));
+              setSelectedDay(null);
+            }}
           >
             ›
           </button>
@@ -99,7 +101,7 @@ export const Calendar = () => {
         </div>
 
         <div className={styles.dayDetail}>
-          {!selectedDay ? (
+          {!selectedDay || !selectedDayData ? (
             <p className={styles.hint}>날짜를 눌러 그날의 기록을 봐요</p>
           ) : selectedDayData.entries.length === 0 ? (
             <p className={styles.hint}>이날은 기록이 없어요</p>
