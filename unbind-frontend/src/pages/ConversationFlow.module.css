@@ -12,7 +12,7 @@
 }
 
 .smallLabel {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
 }
 .quote {
@@ -51,16 +51,16 @@
   border: 0.5px solid var(--border-soft);
   color: var(--text-secondary);
   padding: 10px 24px;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
   border-radius: 8px;
 }
 .primaryBtn {
   background: var(--accent-sage);
-  color: #0c1a15;
+  color: #14301f;
   border: none;
   padding: 10px 24px;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
   border-radius: 8px;
 }
@@ -83,7 +83,7 @@
   border-color: var(--accent-warm);
 }
 .optionTrigger {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 0 0 6px;
 }
@@ -91,11 +91,11 @@
   content: "만약 ";
 }
 .optionText {
-  font-size: 14px;
+  font-size: 16px;
   margin: 0 0 4px;
 }
 .optionReason {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   margin: 0;
 }
@@ -112,7 +112,7 @@
   border-radius: 8px;
   padding: 10px 12px;
   color: var(--text-primary);
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .finalTextarea {
@@ -124,7 +124,7 @@
   border-radius: 10px;
   padding: 14px;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 16px;
   resize: none;
 }
 
@@ -154,7 +154,7 @@
   background: var(--bg-surface-2);
   border-radius: 12px;
   padding: 12px 16px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.6;
 }
 .userBubble {
@@ -164,7 +164,7 @@
   color: var(--text-primary);
   border-radius: 12px;
   padding: 12px 16px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.6;
 }
 
@@ -181,15 +181,15 @@
   border-radius: 8px;
   padding: 12px 14px;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 16px;
 }
 .sendBtn {
   background: var(--accent-sage);
-  color: #0c1a15;
+  color: #14301f;
   border: none;
   padding: 0 18px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -205,7 +205,7 @@
   .aiBubble,
   .userBubble {
     max-width: 92%;
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 .progressDots {
@@ -239,7 +239,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 16px;
   font-family: inherit;
   resize: none;
   overflow-y: hidden;
@@ -249,11 +249,11 @@
 
 .answerBtn {
   background: var(--accent-sage);
-  color: #0c1a15;
+  color: #14301f;
   border: none;
   padding: 12px 18px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 15px;
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -263,7 +263,7 @@
 }
 
 .sendingHint {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   margin-top: 10px;
 }
@@ -286,7 +286,7 @@
   }
 }
 .hintText {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   margin-top: -8px;
 }

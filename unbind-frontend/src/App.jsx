@@ -9,6 +9,9 @@ import { KnotRoom } from "./pages/KnotRoom";
 import { PatternInsight } from "./pages/PatternInsight";
 import { Calendar } from "./pages/Calendar";
 import { RelationshipReport } from "./pages/RelationshipReport";
+import { Onboarding } from "./pages/Onboarding";
+
+const hasSeenOnboarding = () => localStorage.getItem("onboarding_done") === "1";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -37,9 +40,19 @@ function App() {
       />
       <Route path="/signup" element={<SignUp />} />
       <Route
+        path="/onboarding"
+        element={token ? <Onboarding /> : <Navigate to="/login" />}
+      />
+      <Route
         path="/"
         element={
-          token ? <Home onLogout={handleLogout} /> : <Navigate to="/login" />
+          !token ? (
+            <Navigate to="/login" />
+          ) : !hasSeenOnboarding() ? (
+            <Navigate to="/onboarding" />
+          ) : (
+            <Home onLogout={handleLogout} />
+          )
         }
       />
       <Route

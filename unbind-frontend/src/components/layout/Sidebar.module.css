@@ -30,7 +30,7 @@
   height: 26px;
 }
 .brandName {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
 }
@@ -38,7 +38,7 @@
 .navItem {
   text-decoration: none;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 16px;
   padding: 10px 12px;
   border-radius: var(--radius-sm);
 }
@@ -62,7 +62,7 @@
   background: transparent;
   border: none;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 15px;
   text-align: left;
   padding: 10px 12px;
   cursor: pointer;
@@ -93,7 +93,7 @@
   }
   .navItem {
     padding: 6px 10px;
-    font-size: 12px;
+    font-size: 14px;
   }
   .bottom {
     position: fixed;

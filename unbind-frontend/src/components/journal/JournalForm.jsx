@@ -28,13 +28,15 @@ export const JournalForm = () => {
 
   return (
     <div className={styles.container}>
-      <p className={styles.label}>오늘 있었던 일을 적어보세요</p>
+      <p className={styles.label}>
+        누군가와의 관계 때문에 마음에 걸리는 일이 있었나요?
+      </p>
       <div className={styles.box}>
         <textarea
           className={styles.textarea}
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="오늘 있었던 일을 자유롭게 적어보세요..."
+          placeholder="그 사람과 있었던 일, 서운하거나 답답했던 마음을 편하게 적어보세요..."
           rows={4}
         />
         <input

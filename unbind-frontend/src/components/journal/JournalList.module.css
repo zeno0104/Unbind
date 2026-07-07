@@ -2,7 +2,7 @@
   margin-top: 8px;
 }
 .label {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   margin: 0 0 10px;
 }
@@ -17,29 +17,35 @@
 .item {
   display: flex;
   gap: 16px;
-  padding: 15px 0;
+  padding: 15px 12px;
   border-bottom: 0.5px solid var(--border-soft);
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  transition: background 0.15s ease;
+  box-sizing: border-box;
 }
 .item:last-child {
   border-bottom: none;
 }
+.item:hover {
+  background: var(--accent-sage-deep);
+}
 
 .date {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   width: 40px;
   flex-shrink: 0;
   padding-top: 2px;
 }
 .text {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .tag {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-muted);
   background: var(--bg-base);
   border: 0.5px solid var(--border-soft);
@@ -49,7 +55,7 @@
   align-self: flex-start;
 }
 .empty {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   padding: 24px 0;
   text-align: center;
@@ -59,7 +65,7 @@
   background: transparent;
   border: none;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 14px;
   margin-top: 10px;
   cursor: pointer;
   padding: 4px 0;

@@ -3,7 +3,7 @@
 }
 
 .label {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-muted);
   margin: 0 0 10px;
 }
@@ -19,7 +19,7 @@
   width: 100%;
   border: none;
   resize: none;
-  font-size: 14px;
+  font-size: 16px;
   background: transparent;
   color: var(--text-primary);
   box-sizing: border-box;
@@ -41,7 +41,7 @@
   box-sizing: border-box;
   padding: 10px 0 0;
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 15px;
   font-family: inherit;
 }
 
@@ -61,10 +61,10 @@
 
 .submitBtn {
   background: var(--accent-sage);
-  color: #0c1a15;
+  color: #14301f;
   border: none;
   padding: 9px 22px;
-  font-size: 13px;
+  font-size: 15px;
   border-radius: 8px;
   cursor: pointer;
 }

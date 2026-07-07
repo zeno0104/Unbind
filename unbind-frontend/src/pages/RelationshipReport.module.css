@@ -21,7 +21,7 @@
 }
 
 .heroSub {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--text-secondary);
   margin: 0 0 32px;
   text-align: center;
@@ -30,7 +30,7 @@
 .status {
   text-align: center;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 16px;
   margin-top: 40px;
 }
 
@@ -62,13 +62,13 @@
 }
 
 .tagName {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .stats {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
 }
@@ -83,7 +83,7 @@
 .fbGood,
 .fbNeutral,
 .fbHard {
-  font-size: 11px;
+  font-size: 13px;
   padding: 3px 10px;
   border-radius: 999px;
 }
@@ -125,7 +125,7 @@
   display: flex;
   gap: 14px;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .timelineDate {
