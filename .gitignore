@@ -27,9 +27,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-### API 키 보호 ###
-application.properties
-src/main/resources/application.properties
+### 로컬 전용 시크릿 (실제 값이 들어가는 파일만 무시) ###
 .env
 .env.prod
 .env.production
