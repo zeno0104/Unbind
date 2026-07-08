@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import styles from "./Auth.module.css";
-import axios from "../../api/axiosInstance";
-import { Link } from "react-router-dom";
+import axios, { API_BASE_URL } from "../../api/axiosInstance";
+import { Link, useSearchParams } from "react-router-dom";
 
 export const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [searchParams] = useSearchParams();
+  const [errorMsg, setErrorMsg] = useState(
+    searchParams.get("error") ? "소셜 로그인에 실패했어요. 다시 시도해주세요." : ""
+  );
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -69,6 +72,25 @@ export const Login = ({ onLoginSuccess }) => {
             로그인
           </button>
         </form>
+
+        <div className={styles.divider}>
+          <span>또는</span>
+        </div>
+
+        <div className={styles.socialButtons}>
+          <a
+            href={`${API_BASE_URL}/oauth2/authorization/google`}
+            className={`${styles.socialBtn} ${styles.googleBtn}`}
+          >
+            구글로 계속하기
+          </a>
+          <a
+            href={`${API_BASE_URL}/oauth2/authorization/kakao`}
+            className={`${styles.socialBtn} ${styles.kakaoBtn}`}
+          >
+            카카오로 계속하기
+          </a>
+        </div>
 
         <p className={styles.switchText}>
           계정이 없으신가요?{" "}

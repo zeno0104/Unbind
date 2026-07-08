@@ -9,7 +9,7 @@ import { WarmthGauge } from "./WarmthGauge";
 import { KnotReminder } from "./KnotReminder";
 import styles from "./Home.module.css";
 
-export const Home = ({ onLogout }) => {
+export const Home = () => {
   const [entries, setEntries] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const Home = ({ onLogout }) => {
 
   return (
     <div className={styles.container}>
-      <Sidebar onLogout={onLogout} />
+      <Sidebar />
       <div className={styles.content}>
         <div className={styles.hero}>
           <p className={styles.heroTitle}>오늘, 마음에 걸리는 일이 있었나요</p>

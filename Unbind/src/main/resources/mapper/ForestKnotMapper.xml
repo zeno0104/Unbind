@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.unbind.mapper.ForestKnotMapper">
+
+	<insert id="insert" parameterType="com.example.unbind.domain.ForestKnot">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT nextval('forest_knot_seq')
+		</selectKey>
+		INSERT INTO forest_knot (id, user_id, action_item_id, tag, situation_summary, action_text, created_at)
+		VALUES (#{id}, #{userId}, #{actionItemId}, #{tag, jdbcType=VARCHAR}, #{situationSummary}, #{actionText}, CURRENT_TIMESTAMP)
+	</insert>
+
+	<select id="existsByActionItemId" resultType="boolean">
+		SELECT EXISTS (SELECT 1 FROM forest_knot WHERE action_item_id = #{actionItemId})
+	</select>
+
+	<select id="findAll" resultType="com.example.unbind.domain.ForestKnot">
+		SELECT fk.id, fk.user_id, fk.action_item_id, fk.tag, fk.situation_summary, fk.action_text, fk.created_at,
+		       (SELECT COUNT(*) FROM forest_reaction fr WHERE fr.forest_knot_id = fk.id) AS reaction_count,
+		       (SELECT COUNT(*) FROM forest_scrap fs WHERE fs.forest_knot_id = fk.id) AS scrap_count
+		FROM forest_knot fk
+		<where>
+			<if test="tag != null and tag != ''">
+				AND fk.tag = #{tag}
+			</if>
+			<if test="keyword != null and keyword != ''">
+				AND (fk.situation_summary ILIKE CONCAT('%', #{keyword}, '%')
+					OR fk.action_text ILIKE CONCAT('%', #{keyword}, '%'))
+			</if>
+		</where>
+		ORDER BY fk.created_at DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<select id="findById" resultType="com.example.unbind.domain.ForestKnot">
+		SELECT fk.id, fk.user_id, fk.action_item_id, fk.tag, fk.situation_summary, fk.action_text, fk.created_at,
+		       (SELECT COUNT(*) FROM forest_reaction fr WHERE fr.forest_knot_id = fk.id) AS reaction_count,
+		       (SELECT COUNT(*) FROM forest_scrap fs WHERE fs.forest_knot_id = fk.id) AS scrap_count
+		FROM forest_knot fk
+		WHERE fk.id = #{id}
+	</select>
+
+	<delete id="delete">
+		DELETE FROM forest_knot WHERE id = #{id}
+	</delete>
+
+</mapper>

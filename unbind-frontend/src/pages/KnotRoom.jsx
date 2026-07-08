@@ -43,10 +43,15 @@ export const KnotRoom = () => {
   const [naming, setNaming] = useState(null);
   const [nameInput, setNameInput] = useState("");
   const [showSubscribePrompt, setShowSubscribePrompt] = useState(false);
+  const [sharedIds, setSharedIds] = useState(new Set());
+  const [shareMessage, setShareMessage] = useState("");
+  const [shareError, setShareError] = useState(false);
   const svgRef = useRef(null);
 
   const loadConstellations = () => {
-    axios.get("/room/constellations").then((res) => setConstellations(res.data));
+    axios
+      .get("/room/constellations")
+      .then((res) => setConstellations(res.data));
   };
 
   useEffect(() => {
@@ -103,6 +108,26 @@ export const KnotRoom = () => {
     }, 900);
   };
 
+  const openKnot = (item) => {
+    setSelected(item);
+    setShareMessage("");
+    setShareError(false);
+  };
+
+  const handleShareToForest = async (item) => {
+    setShareMessage("");
+    setShareError(false);
+    try {
+      await axios.post("/forest/share", { actionItemId: item.id });
+      setSharedIds((prev) => new Set(prev).add(item.id));
+    } catch (err) {
+      setShareMessage(
+        err.response?.data?.message || "지금은 풀어놓을 수 없어요."
+      );
+      setShareError(true);
+    }
+  };
+
   const openNaming = (tag) => {
     setNaming(tag);
     setNameInput("");
@@ -123,7 +148,9 @@ export const KnotRoom = () => {
   const doExport = () => {
     const svgEl = svgRef.current;
     const svgString = new XMLSerializer().serializeToString(svgEl);
-    const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const svgBlob = new Blob([svgString], {
+      type: "image/svg+xml;charset=utf-8",
+    });
     const url = URL.createObjectURL(svgBlob);
     const img = new Image();
     img.onload = () => {
@@ -225,7 +252,9 @@ export const KnotRoom = () => {
               <g key={cluster.tag}>
                 {cluster.points.length > 1 && (
                   <polyline
-                    points={cluster.points.map((p) => `${p.x},${p.y}`).join(" ")}
+                    points={cluster.points
+                      .map((p) => `${p.x},${p.y}`)
+                      .join(" ")}
                     fill="none"
                     stroke={cluster.completed ? "#e3a159" : "#4a4038"}
                     strokeWidth={cluster.completed ? "1.4" : "1"}
@@ -240,7 +269,9 @@ export const KnotRoom = () => {
                     cluster.completed ? styles.labelCompleted : styles.label
                   }
                   onClick={() =>
-                    cluster.completed && !cluster.name && openNaming(cluster.tag)
+                    cluster.completed &&
+                    !cluster.name &&
+                    openNaming(cluster.tag)
                   }
                 >
                   {cluster.name || cluster.tag}
@@ -259,7 +290,7 @@ export const KnotRoom = () => {
                   className={`${styles.knotGroup} ${
                     isReleasing ? styles.releasing : ""
                   }`}
-                  onClick={() => setSelected(item)}
+                  onClick={() => openKnot(item)}
                 >
                   {item.isCompleted === 1 && !isReleasing ? (
                     <g className={styles.glowShape} style={{ opacity: 1 }}>
@@ -298,7 +329,12 @@ export const KnotRoom = () => {
                         />
                       </g>
                       <g className={styles.glowShape}>
-                        <circle cx={pos.x} cy={pos.y} r="12" fill="url(#glow)" />
+                        <circle
+                          cx={pos.x}
+                          cy={pos.y}
+                          r="12"
+                          fill="url(#glow)"
+                        />
                         <circle cx={pos.x} cy={pos.y} r="2.5" fill="#f0c896" />
                       </g>
                     </>
@@ -350,12 +386,42 @@ export const KnotRoom = () => {
               <p className={styles.tooltipText}>{selected.content}</p>
 
               {selected.isCompleted === 1 ? (
-                <button
-                  className={styles.closeBtn}
-                  onClick={() => setSelected(null)}
-                >
-                  닫기
-                </button>
+                <>
+                  {sharedIds.has(selected.id) || selected.sharedToForest ? (
+                    <p className={styles.successText}>
+                      매듭 숲에 풀어놓았어요.
+                    </p>
+                  ) : (
+                    <>
+                      <p className={styles.feedbackPrompt}>
+                        이 매듭, 다른 사람들에게도 익명으로 풀어놓아볼까요?
+                      </p>
+                      <div className={styles.feedbackRow}>
+                        <button
+                          className={styles.feedbackBtn}
+                          onClick={() => handleShareToForest(selected)}
+                        >
+                          매듭 숲에 풀어놓기
+                        </button>
+                      </div>
+                      {shareMessage && (
+                        <p
+                          className={
+                            shareError ? styles.errorText : styles.successText
+                          }
+                        >
+                          {shareMessage}
+                        </p>
+                      )}
+                    </>
+                  )}
+                  <button
+                    className={styles.closeBtn}
+                    onClick={() => setSelected(null)}
+                  >
+                    닫기
+                  </button>
+                </>
               ) : (
                 <>
                   <p className={styles.feedbackPrompt}>
@@ -395,7 +461,7 @@ export const KnotRoom = () => {
                 className={styles.nameInput}
                 value={nameInput}
                 onChange={(e) => setNameInput(e.target.value)}
-                placeholder="예: 엄마와의 화해"
+                placeholder="예: 김아무개"
                 autoFocus
               />
               <div className={styles.feedbackRow}>
@@ -424,8 +490,7 @@ export const KnotRoom = () => {
             >
               <p className={styles.tooltipLabel}>구독 전용 기능</p>
               <p className={styles.tooltipText}>
-                내 별자리 지도를 이미지로 저장하고 공유하려면 구독이
-                필요해요.
+                내 별자리 지도를 이미지로 저장하고 공유하려면 구독이 필요해요.
               </p>
               <div className={styles.feedbackRow}>
                 <button

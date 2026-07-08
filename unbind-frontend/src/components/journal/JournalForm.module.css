@@ -32,6 +32,42 @@
   color: var(--text-muted);
 }
 
+.tagSectionLabel {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 16px 0 8px;
+  padding-top: 12px;
+  border-top: 0.5px solid var(--border-soft);
+}
+
+.tagChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tagChip {
+  background: transparent;
+  border: 0.5px solid var(--border-soft);
+  color: var(--text-secondary);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+
+.tagChipGhost {
+  color: var(--text-muted);
+  border-style: dashed;
+}
+
+.tagChipActive {
+  background: var(--accent-sage);
+  border-color: var(--accent-sage);
+  color: #14301f;
+  font-weight: 600;
+}
+
 .tagInput {
   width: 100%;
   border: none;

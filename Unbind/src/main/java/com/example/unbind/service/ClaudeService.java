@@ -108,6 +108,46 @@ public class ClaudeService {
 			{"patterns": [{"title": "패턴 제목", "description": "관찰 내용"}]}
 			""" + HONORIFIC_RULE;
 
+	private static final String FOREST_MODERATION_PROMPT = """
+			당신은 'Unbind'의 콘텐츠 검수자입니다. 사용자가 완료한 다짐을 완전히 익명으로 커뮤니티
+			("매듭 숲")에 공유하려고 합니다. 아래 원칙에 따라 검수하고 응답하세요.
+
+			승인 기준:
+			- 실명, 회사명, 학교명, 구체적인 지역명 등 신상을 특정할 수 있는 정보가 없어야 합니다
+			  (있다면 제거하고 일반화해서 다시 쓰세요. 예: "○○회사 김부장" → "직장 상사").
+			- 혐오 발언, 폭력적 표현, 자해·타해 암시, 명백히 부적절한 내용이면 승인하지 마세요.
+			- 그 외에는 승인하세요.
+
+			승인하는 경우, situationSummary와 actionText를 신상 정보 없이 자연스러운 문장으로
+			다듬어서 반환하세요 (내용의 핵심과 감정은 유지하되, 특정 가능한 세부사항만 일반화).
+			각각 2문장 이내로 담백하게 쓰세요. 실명이나 별명은 절대 포함하지 마세요.
+
+			또한 상황을 아래 다섯 카테고리 중 하나로 분류해서 relationshipCategory에 담으세요
+			(가족, 연인, 친구, 직장, 기타). 이 값은 사용자가 적은 이름이 아니라 반드시 이 다섯 단어 중
+			하나여야 합니다.
+
+			반드시 아래 JSON 형식으로만 응답하세요. 다른 텍스트는 절대 추가하지 마세요.
+			{"approved": true 또는 false, "situationSummary": "다듬어진 상황 요약", "actionText": "다듬어진 다짐 문장", "relationshipCategory": "가족|연인|친구|직장|기타 중 하나"}
+			""";
+
+	private static final String REACTION_MODERATION_PROMPT = """
+			당신은 'Unbind'의 콘텐츠 검수자입니다. 사용자가 다른 사람이 완전히 익명으로 공유한 다짐("매듭 숲")에
+			공감하며 자신의 대처 방법을 짧게 답글로 남기려고 합니다. 아래 원칙에 따라 검수하고 응답하세요.
+
+			승인 기준:
+			- 실명, 회사명, 학교명, 구체적인 지역명 등 신상을 특정할 수 있는 정보가 없어야 합니다
+			  (있다면 제거하고 일반화해서 다시 쓰세요).
+			- 혐오 발언, 비하, 조롱, 원글 작성자를 공격하거나 비난하는 표현, 폭력적 표현,
+			  자해·타해 암시, 광고·스팸, 명백히 부적절한 내용이면 승인하지 마세요.
+			- 그 외에는 승인하세요.
+
+			승인하는 경우, actionText를 신상 정보 없이 자연스러운 문장으로 다듬어서 반환하세요
+			(내용의 핵심과 감정은 유지하되, 특정 가능한 세부사항만 일반화). 1~2문장으로 담백하게 쓰세요.
+
+			반드시 아래 JSON 형식으로만 응답하세요. 다른 텍스트는 절대 추가하지 마세요.
+			{"approved": true 또는 false, "actionText": "다듬어진 문장"}
+			""";
+
 	public ClaudeService(@Value("${anthropic.api.key}") String apiKey) {
 		this.restClient = RestClient.builder().baseUrl("https://api.anthropic.com/v1/messages")
 				.defaultHeader("x-api-key", apiKey).defaultHeader("anthropic-version", "2023-06-01")
@@ -213,5 +253,18 @@ public class ClaudeService {
 				.formatted(summary);
 		String responseText = callClaude(PATTERN_SYSTEM_PROMPT, List.of(new ClaudeRequest.Message("user", prompt)));
 		return parseJson(responseText, PatternInsightResponse.class);
+	}
+
+	public ForestModerationResult moderateForForest(String situationText, String actionText) {
+		String prompt = "상황: \"%s\"\n다짐: \"%s\"".formatted(situationText, actionText);
+		String responseText = callClaude(FOREST_MODERATION_PROMPT, List.of(new ClaudeRequest.Message("user", prompt)));
+		return parseJson(responseText, ForestModerationResult.class);
+	}
+
+	public ReactionModerationResult moderateReaction(String actionText) {
+		String prompt = "답글: \"%s\"".formatted(actionText);
+		String responseText = callClaude(REACTION_MODERATION_PROMPT,
+				List.of(new ClaudeRequest.Message("user", prompt)));
+		return parseJson(responseText, ReactionModerationResult.class);
 	}
 }

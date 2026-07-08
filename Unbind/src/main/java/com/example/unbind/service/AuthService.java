@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.unbind.domain.User;
-import com.example.unbind.exception.AuthException;
+import com.example.unbind.exception.AppException;
 import com.example.unbind.mapper.UserMapper;
 import com.example.unbind.util.JwtUtil;
 
@@ -26,16 +26,16 @@ public class AuthService {
 	public User signup(User user) {
 		if (user.getName() == null || user.getName().isBlank() || user.getEmail() == null
 				|| user.getEmail().isBlank() || user.getPassword() == null || user.getPassword().isBlank()) {
-			throw new AuthException(HttpStatus.BAD_REQUEST, "이름, 이메일, 비밀번호를 모두 입력해주세요.");
+			throw new AppException(HttpStatus.BAD_REQUEST, "이름, 이메일, 비밀번호를 모두 입력해주세요.");
 		}
 		if (!user.getEmail().matches(EMAIL_PATTERN)) {
-			throw new AuthException(HttpStatus.BAD_REQUEST, "올바른 이메일 형식이 아니에요.");
+			throw new AppException(HttpStatus.BAD_REQUEST, "올바른 이메일 형식이 아니에요.");
 		}
 		if (user.getPassword().length() < 8) {
-			throw new AuthException(HttpStatus.BAD_REQUEST, "비밀번호는 8자 이상이어야 해요.");
+			throw new AppException(HttpStatus.BAD_REQUEST, "비밀번호는 8자 이상이어야 해요.");
 		}
 		if (mapper.findByEmail(user.getEmail()) != null) {
-			throw new AuthException(HttpStatus.CONFLICT, "이미 가입된 이메일이에요.");
+			throw new AppException(HttpStatus.CONFLICT, "이미 가입된 이메일이에요.");
 		}
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -47,7 +47,7 @@ public class AuthService {
 		User user = mapper.findByEmail(email);
 
 		if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-			throw new AuthException(HttpStatus.UNAUTHORIZED, INVALID_CREDENTIALS_MESSAGE);
+			throw new AppException(HttpStatus.UNAUTHORIZED, INVALID_CREDENTIALS_MESSAGE);
 		}
 
 		return jwtUtil.generateToken(user.getEmail());

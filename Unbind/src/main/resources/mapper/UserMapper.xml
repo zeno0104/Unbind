@@ -11,12 +11,16 @@
 		VALUES (#{id}, #{email}, #{password}, #{name}, CURRENT_TIMESTAMP)
 	</insert>
 	<select id="findByEmail" parameterType="String" resultType="com.example.unbind.domain.User">
-		SELECT id, email, password, name, created_at, is_pro
+		SELECT id, email, password, name, created_at, is_pro, name_changed_at
 		FROM users
 		WHERE email = #{email}
 	</select>
 
 	<update id="updateIsPro">
 		UPDATE users SET is_pro = #{isPro} WHERE id = #{id}
+	</update>
+
+	<update id="updateName">
+		UPDATE users SET name = #{name}, name_changed_at = CURRENT_TIMESTAMP WHERE id = #{id}
 	</update>
 </mapper>

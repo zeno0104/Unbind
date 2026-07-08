@@ -15,7 +15,7 @@ export const SignUp = () => {
     setErrorMsg("");
 
     if (!name.trim() || !email.trim() || !password.trim()) {
-      setErrorMsg("이름, 이메일, 비밀번호를 모두 입력해주세요.");
+      setErrorMsg("닉네임, 이메일, 비밀번호를 모두 입력해주세요.");
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
@@ -52,11 +52,11 @@ export const SignUp = () => {
 
         <form className={styles.form} onSubmit={handleSignUp}>
           <div className={styles.field}>
-            <label htmlFor="name">이름</label>
+            <label htmlFor="name">닉네임</label>
             <input
               type="text"
               id="name"
-              placeholder="이름 입력"
+              placeholder="닉네임 입력"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required

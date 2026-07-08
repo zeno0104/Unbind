@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.unbind.mapper.FeedbackMapper">
+
+	<insert id="insert" parameterType="com.example.unbind.domain.Feedback">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT nextval('feedback_seq')
+		</selectKey>
+		INSERT INTO feedback (id, user_id, content, created_at)
+		VALUES (#{id}, #{userId}, #{content}, CURRENT_TIMESTAMP)
+	</insert>
+
+	<select id="findAllWithUserEmail" resultType="com.example.unbind.domain.Feedback">
+		SELECT f.id, f.user_id, f.content, f.created_at, u.email AS user_email, u.name AS user_name
+		FROM feedback f
+		JOIN users u ON u.id = f.user_id
+		ORDER BY f.created_at DESC
+	</select>
+
+</mapper>

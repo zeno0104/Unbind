@@ -14,4 +14,6 @@ public interface UserMapper {
 
 	void updateIsPro(@Param("id") Long id, @Param("isPro") int isPro);
 
+	void updateName(@Param("id") Long id, @Param("name") String name);
+
 }

@@ -75,29 +75,66 @@
 .optionItem {
   background: var(--bg-surface-2);
   border: 0.5px solid var(--border-soft);
-  border-radius: 10px;
-  padding: 14px 16px;
+  border-left: 3px solid transparent;
+  border-radius: 12px;
+  padding: 16px 18px;
   cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
 }
 .optionItem:hover {
   border-color: var(--accent-warm);
+  border-left-color: var(--accent-warm);
+  background: var(--bg-surface);
+  transform: translateY(-1px);
+}
+.optionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.optionNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent-sage);
+  color: #14301f;
+  font-size: 11px;
+  font-weight: 700;
 }
 .optionTrigger {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin: 0 0 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent-sage-deep);
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-soft);
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin: 0;
 }
 .optionTrigger::before {
-  content: "만약 ";
+  content: "만약, ";
+  font-weight: 400;
+  color: var(--text-muted);
 }
 .optionText {
   font-size: 16px;
-  margin: 0 0 4px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px;
+  line-height: 1.5;
 }
 .optionReason {
-  font-size: 14px;
-  color: var(--text-muted);
+  font-size: 13.5px;
+  color: var(--text-secondary);
   margin: 0;
+  line-height: 1.5;
+  padding-top: 8px;
+  border-top: 0.5px dashed var(--border-soft);
 }
 
 .customBox {
@@ -117,15 +154,23 @@
 
 .finalTextarea {
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   box-sizing: border-box;
-  background: var(--bg-surface-2);
-  border: 0.5px solid var(--border-soft);
-  border-radius: 10px;
-  padding: 14px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-soft);
+  padding: 8px 4px 14px;
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 19px;
+  line-height: 1.7;
+  text-align: center;
+  font-family: inherit;
   resize: none;
+  transition: border-color 0.2s ease;
+}
+.finalTextarea:focus {
+  outline: none;
+  border-bottom-color: var(--accent-sage);
 }
 
 .chatWrap {

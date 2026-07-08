@@ -9,8 +9,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(AuthException.class)
-	public ResponseEntity<Map<String, String>> handleAuthException(AuthException ex) {
+	@ExceptionHandler(AppException.class)
+	public ResponseEntity<Map<String, String>> handleAppException(AppException ex) {
 		return ResponseEntity.status(ex.getStatus()).body(Map.of("message", ex.getMessage()));
 	}
 }

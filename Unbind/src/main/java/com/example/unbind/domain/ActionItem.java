@@ -12,4 +12,5 @@ public class ActionItem {
 	private String feedback;
 	private LocalDateTime entryCreatedAt;
 	private String relationshipTag;
+	private boolean sharedToForest;
 }

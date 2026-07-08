@@ -14,6 +14,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(claudeRateLimitInterceptor).addPathPatterns("/entries/*/conversation/**",
-				"/entries/*/conclude", "/insights/**");
+				"/entries/*/conclude", "/insights/**", "/forest/share", "/forest/knots/*/reactions",
+				"/forest/reactions/*");
 	}
 }

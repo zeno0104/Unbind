@@ -10,6 +10,11 @@ import { PatternInsight } from "./pages/PatternInsight";
 import { Calendar } from "./pages/Calendar";
 import { RelationshipReport } from "./pages/RelationshipReport";
 import { Onboarding } from "./pages/Onboarding";
+import { Landing } from "./pages/Landing";
+import { MyPage } from "./pages/MyPage";
+import { Feedback } from "./pages/Feedback";
+import { Forest } from "./pages/Forest";
+import { OAuthCallback } from "./pages/OAuthCallback";
 
 const hasSeenOnboarding = () => localStorage.getItem("onboarding_done") === "1";
 
@@ -19,11 +24,6 @@ function App() {
   const handleLoginSuccess = (newToken) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
   };
 
   return (
@@ -40,6 +40,10 @@ function App() {
       />
       <Route path="/signup" element={<SignUp />} />
       <Route
+        path="/oauth/callback"
+        element={<OAuthCallback onLoginSuccess={handleLoginSuccess} />}
+      />
+      <Route
         path="/onboarding"
         element={token ? <Onboarding /> : <Navigate to="/login" />}
       />
@@ -47,11 +51,11 @@ function App() {
         path="/"
         element={
           !token ? (
-            <Navigate to="/login" />
+            <Landing />
           ) : !hasSeenOnboarding() ? (
             <Navigate to="/onboarding" />
           ) : (
-            <Home onLogout={handleLogout} />
+            <Home />
           )
         }
       />
@@ -78,6 +82,18 @@ function App() {
       <Route
         path="/relationships"
         element={token ? <RelationshipReport /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/mypage"
+        element={token ? <MyPage /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/feedback"
+        element={token ? <Feedback /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/forest"
+        element={token ? <Forest /> : <Navigate to="/login" />}
       />
     </Routes>
   );

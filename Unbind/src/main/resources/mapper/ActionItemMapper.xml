@@ -38,7 +38,8 @@
 	<select id="findAllByUserId" parameterType="long"
 		resultType="com.example.unbind.domain.ActionItem">
 		SELECT ai.id, ai.entry_id, ai.content, ai.is_completed, ai.feedback,
-		je.created_at AS entry_created_at, je.relationship_tag AS relationship_tag
+		je.created_at AS entry_created_at, je.relationship_tag AS relationship_tag,
+		EXISTS (SELECT 1 FROM forest_knot fk WHERE fk.action_item_id = ai.id) AS shared_to_forest
 		FROM action_item ai
 		JOIN journal_entry je ON ai.entry_id = je.id
 		WHERE je.user_id = #{userId}

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.unbind.mapper.ForestScrapMapper">
+
+	<insert id="insert" parameterType="com.example.unbind.domain.ForestScrap">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT nextval('forest_scrap_seq')
+		</selectKey>
+		INSERT INTO forest_scrap (id, user_id, forest_knot_id, memo, created_at, updated_at)
+		VALUES (#{id}, #{userId}, #{forestKnotId}, #{memo, jdbcType=VARCHAR}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+	</insert>
+
+	<delete id="delete">
+		DELETE FROM forest_scrap WHERE user_id = #{userId} AND forest_knot_id = #{forestKnotId}
+	</delete>
+
+	<delete id="deleteByForestKnotId">
+		DELETE FROM forest_scrap WHERE forest_knot_id = #{forestKnotId}
+	</delete>
+
+	<update id="updateMemo">
+		UPDATE forest_scrap SET memo = #{memo, jdbcType=VARCHAR}, updated_at = CURRENT_TIMESTAMP WHERE id = #{id}
+	</update>
+
+	<select id="findByUserAndKnot" resultType="com.example.unbind.domain.ForestScrap">
+		SELECT id, user_id, forest_knot_id, memo, created_at, updated_at
+		FROM forest_scrap
+		WHERE user_id = #{userId} AND forest_knot_id = #{forestKnotId}
+	</select>
+
+	<select id="findKnotIdsByUserId" resultType="long">
+		SELECT forest_knot_id FROM forest_scrap WHERE user_id = #{userId}
+	</select>
+
+	<select id="findAllByUser" resultType="com.example.unbind.domain.ForestScrap">
+		SELECT fs.id, fs.user_id, fs.forest_knot_id, fs.memo, fs.created_at, fs.updated_at,
+		       fk.tag AS tag, fk.situation_summary AS situation_summary, fk.action_text AS action_text,
+		       fk.created_at AS knot_created_at,
+		       (SELECT COUNT(*) FROM forest_reaction fr WHERE fr.forest_knot_id = fk.id) AS reaction_count
+		FROM forest_scrap fs
+		JOIN forest_knot fk ON fk.id = fs.forest_knot_id
+		WHERE fs.user_id = #{userId}
+		<if test="tag != null and tag != ''">
+			AND fk.tag = #{tag}
+		</if>
+		ORDER BY fs.created_at DESC
+	</select>
+
+</mapper>

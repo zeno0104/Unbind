@@ -138,7 +138,7 @@ export const ConversationFlow = () => {
     return (
       <div className={styles.center}>
         <div key={fadeKey} className={styles.fadeIn}>
-          <p className={styles.smallLabel}>당신의 말로 다시 적어볼까요?</p>
+          <p className={styles.smallLabel}>내 말로 다시 적어볼까요?</p>
           <textarea
             className={styles.finalTextarea}
             value={finalText}
@@ -163,7 +163,7 @@ export const ConversationFlow = () => {
       <div className={styles.center}>
         <div key={fadeKey} className={styles.fadeIn}>
           <p className={styles.smallLabel}>
-            다음에 이 상황이 다시 오면, 나는 무엇을 하고 싶으세요?
+            다음에 이 상황이 다시 오면, 나는 무엇을 해보고 싶을까요?
           </p>
           <div className={styles.optionList}>
             {options.map((opt, idx) => (
@@ -172,7 +172,10 @@ export const ConversationFlow = () => {
                 className={styles.optionItem}
                 onClick={() => handlePickOption(opt)}
               >
-                <p className={styles.optionTrigger}>{opt.trigger}</p>
+                <div className={styles.optionHeader}>
+                  <span className={styles.optionNumber}>{idx + 1}</span>
+                  <p className={styles.optionTrigger}>{opt.trigger}</p>
+                </div>
                 <p className={styles.optionText}>나는 {opt.action}</p>
                 <p className={styles.optionReason}>{opt.reason}</p>
               </div>
