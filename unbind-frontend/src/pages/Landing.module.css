@@ -126,7 +126,7 @@
   gap: 24px;
   max-width: 720px;
   margin: 0 auto;
-  padding: 0 24px 56px;
+  padding: 0 24px 72px;
   box-sizing: border-box;
 }
 
@@ -165,42 +165,68 @@
   margin: 0;
 }
 
-.features {
-  display: flex;
-  gap: 20px;
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 24px 64px;
+.featuresSection {
+  width: 100%;
+  background: var(--bg-surface-2);
+  padding: 48px 0 56px;
   box-sizing: border-box;
 }
 
-.featureCard {
-  flex: 1;
+.featuresEyebrow {
   text-align: center;
-  padding: 20px 12px;
+  font-size: 14px;
+  color: var(--accent-sage);
+  font-weight: 600;
+  margin: 0 0 20px;
+  padding: 0 24px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.featureCard {
+  text-align: left;
+  padding: 24px 20px;
+  background: var(--bg-surface);
+  border: 0.5px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
 }
 
 .featureIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: var(--bg-surface-2);
+  background: var(--accent-sage-deep);
   color: var(--accent-sage);
   margin-bottom: 14px;
 }
 
+.featureIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
 .featureTitle {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 600;
-  margin: 0 0 6px;
+  margin: 0 0 8px;
 }
 
 .featureDesc {
-  font-size: 13px;
-  color: var(--text-muted);
+  font-size: 14px;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
 }
@@ -212,7 +238,7 @@
   padding: 32px 24px 48px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .header {
     padding: 20px;
   }
@@ -229,21 +255,15 @@
     flex-direction: column;
     padding: 0 20px 40px;
   }
+  .featuresSection {
+    padding: 36px 0 40px;
+  }
   .features {
-    flex-direction: column;
-    gap: 8px;
-    padding: 0 20px 48px;
+    grid-template-columns: 1fr;
+    padding: 0 20px;
   }
-  .featureCard {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-align: left;
-    padding: 12px 8px;
-  }
-  .featureIcon {
-    margin-bottom: 0;
-    flex-shrink: 0;
+  .featuresEyebrow {
+    padding: 0 20px;
   }
   .footer {
     display: none;

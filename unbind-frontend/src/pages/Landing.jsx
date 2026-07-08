@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
-import { RoomIcon, RelationshipIcon, InsightIcon } from "../components/layout/NavIcons";
+import {
+  RoomIcon,
+  RelationshipIcon,
+  InsightIcon,
+  ForestIcon,
+} from "../components/layout/NavIcons";
 import styles from "./Landing.module.css";
 
 export const Landing = () => {
@@ -55,33 +60,46 @@ export const Landing = () => {
         </div>
       </section>
 
-      <section className={styles.features}>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>
-            <RoomIcon />
-          </span>
-          <p className={styles.featureTitle}>나의 방</p>
-          <p className={styles.featureDesc}>
-            풀어낸 다짐은 빛으로, 관계별 별자리로 쌓여요
-          </p>
-        </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>
-            <RelationshipIcon />
-          </span>
-          <p className={styles.featureTitle}>관계 리포트</p>
-          <p className={styles.featureDesc}>
-            같은 사람과의 반복된 기록에서 흐름을 발견해요
-          </p>
-        </div>
-        <div className={styles.featureCard}>
-          <span className={styles.featureIcon}>
-            <InsightIcon />
-          </span>
-          <p className={styles.featureTitle}>패턴 인사이트</p>
-          <p className={styles.featureDesc}>
-            쌓아온 기록에서 나만의 패턴을 짚어드려요
-          </p>
+      <section className={styles.featuresSection}>
+        <p className={styles.featuresEyebrow}>이런 공간들도 있어요</p>
+        <div className={styles.features}>
+          <div className={styles.featureCard}>
+            <span className={styles.featureIcon}>
+              <RoomIcon />
+            </span>
+            <p className={styles.featureTitle}>나의 방</p>
+            <p className={styles.featureDesc}>
+              풀어낸 다짐은 빛으로, 관계별 별자리로 쌓여요
+            </p>
+          </div>
+          <div className={styles.featureCard}>
+            <span className={styles.featureIcon}>
+              <RelationshipIcon />
+            </span>
+            <p className={styles.featureTitle}>관계 리포트</p>
+            <p className={styles.featureDesc}>
+              같은 사람과의 반복된 기록에서 흐름을 발견해요
+            </p>
+          </div>
+          <div className={styles.featureCard}>
+            <span className={styles.featureIcon}>
+              <InsightIcon />
+            </span>
+            <p className={styles.featureTitle}>패턴 인사이트</p>
+            <p className={styles.featureDesc}>
+              쌓아온 기록에서 나만의 패턴을 짚어드려요
+            </p>
+          </div>
+          <div className={styles.featureCard}>
+            <span className={styles.featureIcon}>
+              <ForestIcon />
+            </span>
+            <p className={styles.featureTitle}>매듭 숲</p>
+            <p className={styles.featureDesc}>
+              완료한 다짐을 익명으로 나누고, 비슷한 고민을 가진 사람과 공감을
+              주고받아요
+            </p>
+          </div>
         </div>
       </section>
 

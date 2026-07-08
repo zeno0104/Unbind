@@ -3,6 +3,11 @@ import styles from "./Auth.module.css";
 import axios, { API_BASE_URL } from "../../api/axiosInstance";
 import { Link, useSearchParams } from "react-router-dom";
 
+const isInAppBrowser = () => {
+  if (typeof navigator === "undefined") return false;
+  return /KAKAOTALK|NAVER|Instagram|FBAN|FBAV|Line\//i.test(navigator.userAgent || "");
+};
+
 export const Login = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,6 +15,7 @@ export const Login = ({ onLoginSuccess }) => {
   const [errorMsg, setErrorMsg] = useState(
     searchParams.get("error") ? "소셜 로그인에 실패했어요. 다시 시도해주세요." : ""
   );
+  const inAppBrowser = isInAppBrowser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -76,6 +82,14 @@ export const Login = ({ onLoginSuccess }) => {
         <div className={styles.divider}>
           <span>또는</span>
         </div>
+
+        {inAppBrowser && (
+          <p className={styles.inAppWarning}>
+            카카오톡 등 인앱 브라우저에서는 구글 로그인이 제한돼요. 오른쪽 위
+            메뉴에서 "다른 브라우저로 열기"를 눌러주시거나, 카카오 로그인을
+            이용해주세요.
+          </p>
+        )}
 
         <div className={styles.socialButtons}>
           <a
