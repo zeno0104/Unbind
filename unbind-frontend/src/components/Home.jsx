@@ -7,6 +7,7 @@ import { JournalDetailModal } from "./journal/JournalDetailModal";
 import { Sidebar } from "./layout/Sidebar";
 import { WarmthGauge } from "./WarmthGauge";
 import { KnotReminder } from "./KnotReminder";
+import { KakaoAdFit } from "./KakaoAdFit";
 import styles from "./Home.module.css";
 
 export const Home = () => {
@@ -42,6 +43,7 @@ export const Home = () => {
         <WarmthGauge />
         <JournalForm onSubmitSuccess={handleNewEntry} />
         <JournalList entries={entries} onSelect={setSelectedId} />
+        <KakaoAdFit adUnit={import.meta.env.VITE_ADFIT_UNIT_HOME} />
       </div>
 
       {selectedId && (

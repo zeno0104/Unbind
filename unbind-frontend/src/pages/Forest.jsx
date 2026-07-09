@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axios from "../api/axiosInstance";
 import { Sidebar } from "../components/layout/Sidebar";
 import { BookmarkIcon } from "../components/layout/NavIcons";
+import { KakaoAdFit } from "../components/KakaoAdFit";
 import styles from "./Forest.module.css";
 
 const CATEGORIES = ["전체", "가족", "연인", "친구", "직장", "기타"];
@@ -336,6 +337,7 @@ export const Forest = () => {
                 {loadingMore ? "불러오는 중..." : "더 보기"}
               </button>
             )}
+            <KakaoAdFit adUnit={import.meta.env.VITE_ADFIT_UNIT_FOREST} />
           </>
         )}
       </div>
