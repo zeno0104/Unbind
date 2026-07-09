@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const SCRIPT_SRC = "//t1.daumcdn.net/kas/static/ba.min.js";
+const SCRIPT_SRC = "//t1.kakaocdn.net/kas/static/ba.min.js";
 
 let scriptPromise = null;
 const loadAdFitScript = () => {

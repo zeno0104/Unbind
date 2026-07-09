@@ -43,7 +43,7 @@ export const Home = () => {
         <WarmthGauge />
         <JournalForm onSubmitSuccess={handleNewEntry} />
         <JournalList entries={entries} onSelect={setSelectedId} />
-        <KakaoAdFit adUnit={import.meta.env.VITE_ADFIT_UNIT_HOME} />
+        <KakaoAdFit adUnit="DAN-sqNwUJ6uhPIBBRke" width={320} height={100} />
       </div>
 
       {selectedId && (
