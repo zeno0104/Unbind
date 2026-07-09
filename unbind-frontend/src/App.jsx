@@ -15,6 +15,7 @@ import { MyPage } from "./pages/MyPage";
 import { Feedback } from "./pages/Feedback";
 import { Forest } from "./pages/Forest";
 import { OAuthCallback } from "./pages/OAuthCallback";
+import { PrivacyPolicy } from "./pages/PrivacyPolicy";
 
 const hasSeenOnboarding = () => localStorage.getItem("onboarding_done") === "1";
 
@@ -39,6 +40,7 @@ function App() {
         }
       />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route
         path="/oauth/callback"
         element={<OAuthCallback onLoginSuccess={handleLoginSuccess} />}
