@@ -32,3 +32,4 @@ build/
 .env.prod
 .env.production
 unbind-frontend/.env.production
+.claude/secrets/
