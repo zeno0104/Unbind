@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "dev.jaehun0104.unbind",
+      "sha256_cert_fingerprints": [
+        "1B:D2:A4:6B:34:18:9E:66:1C:EE:DD:BD:5C:97:0A:2D:65:AF:9B:1F:A0:D5:C2:1F:F7:CF:E5:8D:97:6B:7D:EE"
+      ]
+    }
+  }
+]
