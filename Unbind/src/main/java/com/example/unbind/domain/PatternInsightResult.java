@@ -10,6 +10,5 @@ import java.util.List;
 @AllArgsConstructor
 public class PatternInsightResult {
 	private boolean hasEnoughData;
-	private Boolean isPro;
 	private List<PatternInsight> patterns;
 }

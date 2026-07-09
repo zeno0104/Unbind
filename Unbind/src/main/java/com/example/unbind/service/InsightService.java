@@ -34,17 +34,16 @@ public class InsightService {
 	public PatternInsightResult getPatterns(String email) {
 		User user = userMapper.findByEmail(email);
 		List<JournalEntry> entries = journalEntryMapper.findAllByUserId(user.getId());
-		boolean isPro = user.getIsPro() != null && user.getIsPro() == 1;
 
 		if (entries.size() < MIN_ENTRIES_FOR_INSIGHT) {
-			return new PatternInsightResult(false, isPro, Collections.emptyList());
+			return new PatternInsightResult(false, Collections.emptyList());
 		}
 
 		List<ActionItem> actionItems = actionItemMapper.findAllByUserId(user.getId());
 		String summary = buildSummary(entries, actionItems);
 
 		List<com.example.unbind.domain.PatternInsight> patterns = claudeService.analyzePatterns(summary).getPatterns();
-		return new PatternInsightResult(true, isPro, patterns);
+		return new PatternInsightResult(true, patterns);
 	}
 
 	public List<RelationshipReport> getRelationshipReports(String email) {

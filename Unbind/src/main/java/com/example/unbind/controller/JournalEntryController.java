@@ -35,8 +35,8 @@ public class JournalEntryController {
 	}
 
 	@GetMapping("/{id}")
-	public JournalEntry get(@PathVariable("id") Long id) {
-		return service.get(id);
+	public JournalEntry get(@PathVariable("id") Long id, Authentication authentication) {
+		return service.get(id, authentication.getName());
 	}
 
 	@GetMapping("/tags")

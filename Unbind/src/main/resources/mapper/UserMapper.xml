@@ -16,10 +16,6 @@
 		WHERE email = #{email}
 	</select>
 
-	<update id="updateIsPro">
-		UPDATE users SET is_pro = #{isPro} WHERE id = #{id}
-	</update>
-
 	<update id="updateName">
 		UPDATE users SET name = #{name}, name_changed_at = CURRENT_TIMESTAMP WHERE id = #{id}
 	</update>

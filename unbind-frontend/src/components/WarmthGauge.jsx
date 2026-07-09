@@ -4,9 +4,13 @@ import styles from "./WarmthGauge.module.css";
 
 export const WarmthGauge = () => {
   const [warmth, setWarmth] = useState(null);
+  const [streak, setStreak] = useState(0);
 
   useEffect(() => {
-    axios.get("/stats/warmth").then((res) => setWarmth(res.data.warmth));
+    axios.get("/stats/warmth").then((res) => {
+      setWarmth(res.data.warmth);
+      setStreak(res.data.streak ?? 0);
+    });
   }, []);
 
   if (warmth === null) return null;
@@ -29,6 +33,9 @@ export const WarmthGauge = () => {
       <div>
         <p className={styles.title}>채움온도</p>
         <p className={styles.desc}>실천을 이어갈수록 따뜻해져요</p>
+        {streak > 0 && (
+          <p className={styles.streak}>🔥 {streak}일째 기록 중</p>
+        )}
       </div>
     </div>
   );

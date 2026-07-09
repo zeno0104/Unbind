@@ -12,8 +12,6 @@ public interface UserMapper {
 
 	User findByEmail(String email);
 
-	void updateIsPro(@Param("id") Long id, @Param("isPro") int isPro);
-
 	void updateName(@Param("id") Long id, @Param("name") String name);
 
 }

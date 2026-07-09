@@ -63,32 +63,6 @@
   margin: 0;
 }
 
-.card.locked .cardTitle,
-.card.locked .cardDesc {
-  filter: blur(5px);
-  user-select: none;
-}
-
-.lockOverlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.25);
-}
-
-.subscribeBtn {
-  background: #d9a26c;
-  color: #2c1c0e;
-  border: none;
-  padding: 10px 20px;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 @media (max-width: 768px) {
   .content {
     padding: 20px 16px 90px;

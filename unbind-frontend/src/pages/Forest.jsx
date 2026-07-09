@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "../api/axiosInstance";
 import { Sidebar } from "../components/layout/Sidebar";
 import { BookmarkIcon } from "../components/layout/NavIcons";
@@ -271,11 +272,20 @@ export const Forest = () => {
         {loading ? (
           <p className={styles.status}>불러오는 중...</p>
         ) : knots.length === 0 ? (
-          <p className={styles.status}>
-            {searchTerm
-              ? "검색 결과가 없어요."
-              : "아직 이 매듭 숲에 풀어놓아진 매듭이 없어요."}
-          </p>
+          searchTerm ? (
+            <p className={styles.status}>검색 결과가 없어요.</p>
+          ) : (
+            <div className={styles.emptyState}>
+              <p className={styles.emptyStateText}>
+                아직 아무도 매듭을 풀어놓지 않았어요.
+                <br />
+                첫 번째 매듭의 주인공이 되어보세요.
+              </p>
+              <Link to="/" className={styles.emptyStateCta}>
+                내 다짐 기록하러 가기
+              </Link>
+            </div>
+          )
         ) : (
           <>
             <div className={styles.list}>

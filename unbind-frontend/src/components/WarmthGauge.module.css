@@ -54,3 +54,10 @@
   color: var(--text-muted);
   margin: 0;
 }
+
+.streak {
+  font-size: 13px;
+  color: var(--accent-warm);
+  font-weight: 600;
+  margin: 6px 0 0;
+}

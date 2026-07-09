@@ -32,14 +32,6 @@ public class UserController {
 		return user;
 	}
 
-	@PostMapping("/subscribe")
-	public User subscribe(Authentication authentication) {
-		User user = userMapper.findByEmail(authentication.getName());
-		userMapper.updateIsPro(user.getId(), 1);
-		user.setIsPro(1);
-		return user;
-	}
-
 	@PatchMapping("/me/name")
 	public User updateName(Authentication authentication, @RequestBody NameRequest request) {
 		if (request.getName() == null || request.getName().isBlank()) {

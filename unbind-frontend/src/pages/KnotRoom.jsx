@@ -39,10 +39,8 @@ export const KnotRoom = () => {
   const [selected, setSelected] = useState(null);
   const [warmth, setWarmth] = useState(0);
   const [releasingId, setReleasingId] = useState(null);
-  const [isPro, setIsPro] = useState(false);
   const [naming, setNaming] = useState(null);
   const [nameInput, setNameInput] = useState("");
-  const [showSubscribePrompt, setShowSubscribePrompt] = useState(false);
   const [sharedIds, setSharedIds] = useState(new Set());
   const [shareMessage, setShareMessage] = useState("");
   const [shareError, setShareError] = useState(false);
@@ -56,7 +54,6 @@ export const KnotRoom = () => {
 
   useEffect(() => {
     loadConstellations();
-    axios.get("/users/me").then((res) => setIsPro(res.data.isPro === 1));
     axios.get("/stats/warmth").then((res) => setWarmth(res.data.warmth));
   }, []);
 
@@ -171,20 +168,6 @@ export const KnotRoom = () => {
     img.src = url;
   };
 
-  const handleExportClick = () => {
-    if (!isPro) {
-      setShowSubscribePrompt(true);
-      return;
-    }
-    doExport();
-  };
-
-  const handleSubscribeAndExport = async () => {
-    await axios.post("/users/subscribe");
-    setIsPro(true);
-    setShowSubscribePrompt(false);
-    doExport();
-  };
 
   return (
     <div className={styles.container}>
@@ -350,7 +333,7 @@ export const KnotRoom = () => {
           <p className={styles.footer}>
             풀어낸 빛 {done.length}개 · 아직 쥐고 있는 매듭 {active.length}개
           </p>
-          <button className={styles.exportBtn} onClick={handleExportClick}>
+          <button className={styles.exportBtn} onClick={doExport}>
             내 별자리 지도 저장하기
           </button>
         </div>
@@ -479,36 +462,6 @@ export const KnotRoom = () => {
           </div>
         )}
 
-        {showSubscribePrompt && (
-          <div
-            className={styles.overlay}
-            onClick={() => setShowSubscribePrompt(false)}
-          >
-            <div
-              className={styles.tooltip}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <p className={styles.tooltipLabel}>구독 전용 기능</p>
-              <p className={styles.tooltipText}>
-                내 별자리 지도를 이미지로 저장하고 공유하려면 구독이 필요해요.
-              </p>
-              <div className={styles.feedbackRow}>
-                <button
-                  className={styles.feedbackBtn}
-                  onClick={handleSubscribeAndExport}
-                >
-                  구독하고 저장하기
-                </button>
-                <button
-                  className={styles.closeBtn}
-                  onClick={() => setShowSubscribePrompt(false)}
-                >
-                  닫기
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

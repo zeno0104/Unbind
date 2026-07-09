@@ -83,6 +83,30 @@
   margin-top: 40px;
 }
 
+.emptyState {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.emptyStateText {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.emptyStateCta {
+  display: inline-block;
+  background: var(--accent-sage);
+  color: #14301f;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
 .list {
   display: flex;
   flex-direction: column;
