@@ -90,3 +90,43 @@ CREATE SEQUENCE forest_knot_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE forest_reaction_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE feedback_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE forest_scrap_seq START WITH 1 INCREMENT BY 1;
+
+-- 계정 삭제(2), 비밀번호 재설정(3), 다짐 리마인더 푸시(4), 인사이트 캐싱(5) 추가분
+
+CREATE TABLE password_reset_token (
+	id          BIGINT PRIMARY KEY,
+	user_id     BIGINT NOT NULL REFERENCES users(id),
+	token_hash  VARCHAR(64) NOT NULL,
+	expires_at  TIMESTAMP NOT NULL,
+	used_at     TIMESTAMP,
+	created_at  TIMESTAMP
+);
+CREATE SEQUENCE password_reset_token_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE push_subscription (
+	id          BIGINT PRIMARY KEY,
+	user_id     BIGINT NOT NULL REFERENCES users(id),
+	endpoint    TEXT NOT NULL UNIQUE,
+	p256dh      VARCHAR(255) NOT NULL,
+	auth        VARCHAR(255) NOT NULL,
+	created_at  TIMESTAMP
+);
+CREATE SEQUENCE push_subscription_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE relationship_insight_cache (
+	user_id         BIGINT NOT NULL REFERENCES users(id),
+	tag             VARCHAR(50) NOT NULL,
+	entry_count     INTEGER NOT NULL,
+	completed_count INTEGER NOT NULL,
+	insight_text    TEXT,
+	computed_at     TIMESTAMP,
+	PRIMARY KEY (user_id, tag)
+);
+
+CREATE TABLE pattern_insight_cache (
+	user_id         BIGINT PRIMARY KEY REFERENCES users(id),
+	entry_count     INTEGER NOT NULL,
+	completed_count INTEGER NOT NULL,
+	patterns_json   TEXT,
+	computed_at     TIMESTAMP
+);
