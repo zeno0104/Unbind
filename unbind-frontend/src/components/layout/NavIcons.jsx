@@ -29,15 +29,6 @@ export const CalendarIcon = () => (
   </svg>
 );
 
-export const RelationshipIcon = () => (
-  <svg {...base}>
-    <circle cx="9" cy="8" r="3.2" />
-    <path d="M2.8 20v-1.2A4.3 4.3 0 0 1 7.1 14.5h3.8a4.3 4.3 0 0 1 4.3 4.3V20" />
-    <path d="M16 8.6a3 3 0 1 0 0-5.6" />
-    <path d="M15.5 14.6a4.2 4.2 0 0 1 3.7 4.17V20" />
-  </svg>
-);
-
 export const ForestIcon = () => (
   <svg {...base}>
     <path d="M12 2.5 8 9h2.2L6.5 15h3.2L6 21h12l-3.7-6h3.2L13.8 9H16z" />
@@ -59,9 +50,3 @@ export const MoreIcon = () => (
   </svg>
 );
 
-export const InsightIcon = () => (
-  <svg {...base}>
-    <path d="M12 3.5 13.3 8l4.2 1.5-4.2 1.5L12 15.5 10.7 11l-4.2-1.5 4.2-1.5z" />
-    <path d="M18.5 15.5 19.3 18l2.2.8-2.2.8-.8 2.4-.8-2.4-2.2-.8 2.2-.8z" />
-  </svg>
-);

@@ -5,9 +5,7 @@ import {
   HomeIcon,
   RoomIcon,
   CalendarIcon,
-  RelationshipIcon,
   ForestIcon,
-  InsightIcon,
   MoreIcon,
 } from "./NavIcons";
 
@@ -18,10 +16,7 @@ const primaryNavItems = [
   { to: "/forest", label: "매듭 숲", Icon: ForestIcon },
 ];
 
-const secondaryNavItems = [
-  { to: "/relationships", label: "관계 리포트", Icon: RelationshipIcon },
-  { to: "/insights", label: "패턴 인사이트", Icon: InsightIcon },
-];
+const secondaryNavItems = [];
 
 const navItems = [...primaryNavItems, ...secondaryNavItems];
 const secondaryPaths = new Set(secondaryNavItems.map((i) => i.to));

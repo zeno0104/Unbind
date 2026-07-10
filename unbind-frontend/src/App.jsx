@@ -6,9 +6,7 @@ import { Home } from "./components/Home";
 import { ConversationFlow } from "./pages/ConversationFlow";
 import { JournalDetail } from "./pages/JournalDetail";
 import { KnotRoom } from "./pages/KnotRoom";
-import { PatternInsight } from "./pages/PatternInsight";
 import { Calendar } from "./pages/Calendar";
-import { RelationshipReport } from "./pages/RelationshipReport";
 import { Onboarding } from "./pages/Onboarding";
 import { Landing } from "./pages/Landing";
 import { MyPage } from "./pages/MyPage";
@@ -16,6 +14,8 @@ import { Feedback } from "./pages/Feedback";
 import { Forest } from "./pages/Forest";
 import { OAuthCallback } from "./pages/OAuthCallback";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
 
 const hasSeenOnboarding = () => localStorage.getItem("onboarding_done") === "1";
 
@@ -41,6 +41,8 @@ function App() {
       />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route
         path="/oauth/callback"
         element={<OAuthCallback onLoginSuccess={handleLoginSuccess} />}
@@ -74,16 +76,8 @@ function App() {
         element={token ? <KnotRoom /> : <Navigate to="/login" />}
       />
       <Route
-        path="/insights"
-        element={token ? <PatternInsight /> : <Navigate to="/login" />}
-      />
-      <Route
         path="/calendar"
         element={token ? <Calendar /> : <Navigate to="/login" />}
-      />
-      <Route
-        path="/relationships"
-        element={token ? <RelationshipReport /> : <Navigate to="/login" />}
       />
       <Route
         path="/mypage"

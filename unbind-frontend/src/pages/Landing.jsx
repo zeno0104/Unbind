@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  RoomIcon,
-  RelationshipIcon,
-  InsightIcon,
-  ForestIcon,
-} from "../components/layout/NavIcons";
+import { RoomIcon, ForestIcon } from "../components/layout/NavIcons";
 import styles from "./Landing.module.css";
 
 export const Landing = () => {
@@ -48,7 +43,7 @@ export const Landing = () => {
           <span className={styles.stepBadge}>1</span>
           <p className={styles.stepTitle}>먼저, 내려놓아요</p>
           <p className={styles.stepDesc}>
-            짧은 질문 두 번으로 내가 바꿀 수 없었던 부분을 알아차려요
+            짧은 질문 한 번으로 내가 바꿀 수 없었던 부분을 알아차려요
           </p>
         </div>
         <div className={styles.step}>
@@ -69,25 +64,7 @@ export const Landing = () => {
             </span>
             <p className={styles.featureTitle}>나의 방</p>
             <p className={styles.featureDesc}>
-              풀어낸 다짐은 빛으로, 관계별 별자리로 쌓여요
-            </p>
-          </div>
-          <div className={styles.featureCard}>
-            <span className={styles.featureIcon}>
-              <RelationshipIcon />
-            </span>
-            <p className={styles.featureTitle}>관계 리포트</p>
-            <p className={styles.featureDesc}>
-              같은 사람과의 반복된 기록에서 흐름을 발견해요
-            </p>
-          </div>
-          <div className={styles.featureCard}>
-            <span className={styles.featureIcon}>
-              <InsightIcon />
-            </span>
-            <p className={styles.featureTitle}>패턴 인사이트</p>
-            <p className={styles.featureDesc}>
-              쌓아온 기록에서 나만의 패턴을 짚어드려요
+              관계별 서랍에 다짐과 기록이 정리되고, 흐름도 함께 보여요
             </p>
           </div>
           <div className={styles.featureCard}>
