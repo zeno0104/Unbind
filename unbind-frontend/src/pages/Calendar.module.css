@@ -41,7 +41,19 @@
   line-height: 1;
 }
 
-.week {
+.weekLabels {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+}
+
+.weekLabel {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.month {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 6px;
@@ -52,17 +64,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 4px;
   background: var(--bg-surface-2);
   border: 0.5px solid var(--border-soft);
   border-radius: var(--radius-md);
-  padding: 12px 4px;
+  padding: 10px 4px;
   cursor: pointer;
   color: var(--text-secondary);
+  aspect-ratio: 1;
 }
 
 .day.today {
-  border-color: var(--accent-warm);
+  border-color: var(--accent-sage);
+  border-width: 1.5px;
+}
+
+.day.outside {
+  opacity: 0.4;
 }
 
 .day.selected {
@@ -70,13 +89,8 @@
   color: var(--text-primary);
 }
 
-.dayLabel {
-  font-size: 13px;
-  color: var(--text-muted);
-}
-
 .dayNum {
-  font-size: 16px;
+  font-size: 15px;
   font-variant-numeric: tabular-nums;
 }
 

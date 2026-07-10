@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "../api/axiosInstance";
 import { Sidebar } from "../components/layout/Sidebar";
 import { JournalDetailModal } from "../components/journal/JournalDetailModal";
+import { KakaoAdFit } from "../components/KakaoAdFit";
 import { useNavigate } from "react-router-dom";
 import styles from "./Calendar.module.css";
 
@@ -15,6 +16,8 @@ const startOfWeek = (date) => {
   return d;
 };
 
+const startOfMonth = (date) => new Date(date.getFullYear(), date.getMonth(), 1);
+
 const isSameDay = (a, b) =>
   a.getFullYear() === b.getFullYear() &&
   a.getMonth() === b.getMonth() &&
@@ -22,7 +25,7 @@ const isSameDay = (a, b) =>
 
 export const Calendar = () => {
   const [entries, setEntries] = useState([]);
-  const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
+  const [monthCursor, setMonthCursor] = useState(() => startOfMonth(new Date()));
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedEntryId, setSelectedEntryId] = useState(null);
   const navigate = useNavigate();
@@ -31,20 +34,33 @@ export const Calendar = () => {
     axios.get("/entries").then((res) => setEntries(res.data));
   }, []);
 
-  const weekDays = useMemo(() => {
-    return Array.from({ length: 7 }, (_, i) => {
-      const date = new Date(weekStart.getTime() + i * DAY_MS);
+  const monthDays = useMemo(() => {
+    const lastDayOfMonth = new Date(
+      monthCursor.getFullYear(),
+      monthCursor.getMonth() + 1,
+      0
+    );
+    const gridStart = startOfWeek(monthCursor);
+    const gridEnd = startOfWeek(lastDayOfMonth);
+    const totalDays = Math.round((gridEnd - gridStart) / DAY_MS) + 7;
+
+    return Array.from({ length: totalDays }, (_, i) => {
+      const date = new Date(gridStart.getTime() + i * DAY_MS);
       const dayEntries = entries.filter((e) =>
         isSameDay(new Date(e.createdAt), date)
       );
-      return { date, entries: dayEntries };
+      return {
+        date,
+        entries: dayEntries,
+        inMonth: date.getMonth() === monthCursor.getMonth(),
+      };
     });
-  }, [weekStart, entries]);
+  }, [monthCursor, entries]);
 
-  const monthLabel = `${weekStart.getFullYear()}년 ${weekStart.getMonth() + 1}월`;
+  const monthLabel = `${monthCursor.getFullYear()}년 ${monthCursor.getMonth() + 1}월`;
   const today = new Date();
 
-  const selectedDayData = weekDays.find(
+  const selectedDayData = monthDays.find(
     (d) => selectedDay && isSameDay(d.date, selectedDay)
   );
 
@@ -56,7 +72,9 @@ export const Calendar = () => {
           <button
             className={styles.navBtn}
             onClick={() => {
-              setWeekStart(new Date(weekStart.getTime() - 7 * DAY_MS));
+              setMonthCursor(
+                new Date(monthCursor.getFullYear(), monthCursor.getMonth() - 1, 1)
+              );
               setSelectedDay(null);
             }}
           >
@@ -66,7 +84,9 @@ export const Calendar = () => {
           <button
             className={styles.navBtn}
             onClick={() => {
-              setWeekStart(new Date(weekStart.getTime() + 7 * DAY_MS));
+              setMonthCursor(
+                new Date(monthCursor.getFullYear(), monthCursor.getMonth() + 1, 1)
+              );
               setSelectedDay(null);
             }}
           >
@@ -74,11 +94,19 @@ export const Calendar = () => {
           </button>
         </div>
 
-        <div className={styles.week}>
-          {weekDays.map(({ date, entries: dayEntries }) => (
+        <div className={styles.weekLabels}>
+          {DAY_LABELS.map((label) => (
+            <span key={label} className={styles.weekLabel}>
+              {label}
+            </span>
+          ))}
+        </div>
+
+        <div className={styles.month}>
+          {monthDays.map(({ date, entries: dayEntries, inMonth }) => (
             <button
               key={date.toISOString()}
-              className={`${styles.day} ${
+              className={`${styles.day} ${!inMonth ? styles.outside : ""} ${
                 isSameDay(date, today) ? styles.today : ""
               } ${
                 selectedDay && isSameDay(date, selectedDay)
@@ -87,9 +115,6 @@ export const Calendar = () => {
               }`}
               onClick={() => setSelectedDay(date)}
             >
-              <span className={styles.dayLabel}>
-                {DAY_LABELS[date.getDay()]}
-              </span>
               <span className={styles.dayNum}>{date.getDate()}</span>
               <span className={styles.dots}>
                 {dayEntries.slice(0, 3).map((e) => (
@@ -126,6 +151,8 @@ export const Calendar = () => {
             </div>
           )}
         </div>
+
+        <KakaoAdFit adUnit={import.meta.env.VITE_ADFIT_UNIT_CALENDAR} />
       </div>
 
       {selectedEntryId && (
@@ -133,6 +160,10 @@ export const Calendar = () => {
           entryId={selectedEntryId}
           onClose={() => setSelectedEntryId(null)}
           onStartConversation={(id) => navigate(`/entries/${id}/conversation`)}
+          onDeleted={(id) => {
+            setEntries((prev) => prev.filter((e) => e.id !== id));
+            setSelectedEntryId(null);
+          }}
         />
       )}
     </div>
