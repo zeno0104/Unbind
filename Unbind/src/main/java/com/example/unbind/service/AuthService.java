@@ -2,10 +2,12 @@ package com.example.unbind.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.internet.MimeMessage;
 
 import com.example.unbind.domain.PasswordResetToken;
 import com.example.unbind.domain.User;
@@ -109,14 +111,54 @@ public class AuthService {
 		passwordResetTokenMapper.markUsed(tokenEntity.getId());
 	}
 
-	private void sendResetEmail(String toEmail, String rawToken) {
+	private void sendResetEmail(String toEmail, String rawToken) throws Exception {
 		String link = passwordResetFrontendUri + "?token=" + rawToken;
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom(mailFrom);
-		message.setTo(toEmail);
-		message.setSubject("[Unbind] 비밀번호 재설정 안내");
-		message.setText("아래 링크에서 비밀번호를 재설정해주세요 (30분간 유효):\n\n" + link
-				+ "\n\n본인이 요청하지 않았다면 이 메일을 무시하셔도 돼요.");
+
+		String html = """
+				<!DOCTYPE html>
+				<html>
+				<body style="margin:0; padding:0; background-color:#f2f1e2; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;">
+				  <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="background-color:#f2f1e2; padding:40px 16px;">
+				    <tr>
+				      <td align="center">
+				        <table role="presentation" width="100%%" cellpadding="0" cellspacing="0" style="max-width:480px; background-color:#fdfcf4; border-radius:16px; overflow:hidden;">
+				          <tr>
+				            <td style="padding:36px 32px 28px;">
+				              <p style="margin:0 0 24px; font-size:15px; font-weight:700; color:#5e8567; letter-spacing:0.02em;">Unbind</p>
+				              <h1 style="margin:0 0 16px; font-size:20px; color:#3b2a22;">비밀번호를 재설정해주세요</h1>
+				              <p style="margin:0 0 28px; font-size:14.5px; line-height:1.7; color:#5c4c40;">
+				                아래 버튼을 눌러 새 비밀번호를 설정해주세요.<br />
+				                이 링크는 30분간만 유효해요.
+				              </p>
+				              <table role="presentation" cellpadding="0" cellspacing="0">
+				                <tr>
+				                  <td style="border-radius:8px; background-color:#5e8567;">
+				                    <a href="%s" style="display:inline-block; padding:12px 28px; font-size:14.5px; font-weight:600; color:#ffffff; text-decoration:none;">비밀번호 재설정하기</a>
+				                  </td>
+				                </tr>
+				              </table>
+				              <p style="margin:32px 0 0; font-size:13px; line-height:1.6; color:#9c8f7f;">
+				                본인이 요청하지 않았다면 이 메일을 무시하셔도 돼요.
+				              </p>
+				            </td>
+				          </tr>
+				        </table>
+				      </td>
+				    </tr>
+				  </table>
+				</body>
+				</html>
+				""".formatted(link);
+
+		String text = "아래 링크에서 비밀번호를 재설정해주세요 (30분간 유효):\n\n" + link
+				+ "\n\n본인이 요청하지 않았다면 이 메일을 무시하셔도 돼요.";
+
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message, false, "UTF-8");
+		helper.setFrom(mailFrom);
+		helper.setTo(toEmail);
+		helper.setSubject("[Unbind] 비밀번호 재설정 안내");
+		helper.setText(text, html);
 		mailSender.send(message);
 	}
 
