@@ -2,16 +2,22 @@ package com.example.unbind.service;
 
 import com.example.unbind.domain.ActionItem;
 import com.example.unbind.domain.JournalEntry;
+import com.example.unbind.domain.PatternInsight;
+import com.example.unbind.domain.PatternInsightCache;
 import com.example.unbind.domain.PatternInsightResult;
+import com.example.unbind.domain.RelationshipInsightCache;
 import com.example.unbind.domain.RelationshipReport;
 import com.example.unbind.domain.User;
 import com.example.unbind.mapper.ActionItemMapper;
+import com.example.unbind.mapper.InsightCacheMapper;
 import com.example.unbind.mapper.JournalEntryMapper;
 import com.example.unbind.mapper.UserMapper;
+import tools.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -30,6 +36,8 @@ public class InsightService {
 	private final ActionItemMapper actionItemMapper;
 	private final UserMapper userMapper;
 	private final ClaudeService claudeService;
+	private final InsightCacheMapper insightCacheMapper;
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	public PatternInsightResult getPatterns(String email) {
 		User user = userMapper.findByEmail(email);
@@ -40,10 +48,41 @@ public class InsightService {
 		}
 
 		List<ActionItem> actionItems = actionItemMapper.findAllByUserId(user.getId());
-		String summary = buildSummary(entries, actionItems);
+		int completedCount = (int) actionItems.stream()
+				.filter(a -> a.getIsCompleted() != null && a.getIsCompleted() == 1).count();
 
-		List<com.example.unbind.domain.PatternInsight> patterns = claudeService.analyzePatterns(summary).getPatterns();
+		PatternInsightCache cache = insightCacheMapper.findPatternCache(user.getId());
+		if (cache != null && cache.getEntryCount() == entries.size() && cache.getCompletedCount() == completedCount) {
+			List<PatternInsight> cached = deserializePatterns(cache.getPatternsJson());
+			if (cached != null) {
+				return new PatternInsightResult(true, cached);
+			}
+		}
+
+		String summary = buildSummary(entries, actionItems);
+		List<PatternInsight> patterns = claudeService.analyzePatterns(summary).getPatterns();
+		insightCacheMapper.upsertPatternCache(user.getId(), entries.size(), completedCount,
+				serializePatterns(patterns));
 		return new PatternInsightResult(true, patterns);
+	}
+
+	private String serializePatterns(List<PatternInsight> patterns) {
+		try {
+			return objectMapper.writeValueAsString(patterns);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private List<PatternInsight> deserializePatterns(String json) {
+		if (json == null) {
+			return null;
+		}
+		try {
+			return Arrays.asList(objectMapper.readValue(json, PatternInsight[].class));
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public List<RelationshipReport> getRelationshipReports(String email) {
@@ -79,8 +118,8 @@ public class InsightService {
 							.collect(Collectors.toList()));
 
 			if (tagEntries.size() >= MIN_ENTRIES_FOR_RELATIONSHIP_INSIGHT) {
-				String summary = buildRelationshipSummary(tag, tagEntries, tagActionItems);
-				report.setInsight(claudeService.summarizeRelationship(summary));
+				report.setInsight(getRelationshipInsight(user.getId(), tag, tagEntries, tagActionItems,
+						report.getCompletedCount()));
 			}
 
 			reports.add(report);
@@ -88,6 +127,20 @@ public class InsightService {
 
 		reports.sort(Comparator.comparingInt(RelationshipReport::getEntryCount).reversed());
 		return reports;
+	}
+
+	private String getRelationshipInsight(Long userId, String tag, List<JournalEntry> tagEntries,
+			List<ActionItem> tagActionItems, int completedCount) {
+		RelationshipInsightCache cache = insightCacheMapper.findRelationshipCache(userId, tag);
+		if (cache != null && cache.getEntryCount() == tagEntries.size()
+				&& cache.getCompletedCount() == completedCount) {
+			return cache.getInsightText();
+		}
+
+		String summary = buildRelationshipSummary(tag, tagEntries, tagActionItems);
+		String insight = claudeService.summarizeRelationship(summary);
+		insightCacheMapper.upsertRelationshipCache(userId, tag, tagEntries.size(), completedCount, insight);
+		return insight;
 	}
 
 	private String buildRelationshipSummary(String tag, List<JournalEntry> entries, List<ActionItem> actionItems) {

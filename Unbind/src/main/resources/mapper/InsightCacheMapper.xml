@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.unbind.mapper.InsightCacheMapper">
+
+	<select id="findRelationshipCache" resultType="com.example.unbind.domain.RelationshipInsightCache">
+		SELECT user_id, tag, entry_count, completed_count, insight_text
+		FROM relationship_insight_cache
+		WHERE user_id = #{userId} AND tag = #{tag}
+	</select>
+
+	<insert id="upsertRelationshipCache">
+		INSERT INTO relationship_insight_cache (user_id, tag, entry_count, completed_count, insight_text, computed_at)
+		VALUES (#{userId}, #{tag}, #{entryCount}, #{completedCount}, #{insightText}, CURRENT_TIMESTAMP)
+		ON CONFLICT (user_id, tag) DO UPDATE SET
+			entry_count = EXCLUDED.entry_count,
+			completed_count = EXCLUDED.completed_count,
+			insight_text = EXCLUDED.insight_text,
+			computed_at = EXCLUDED.computed_at
+	</insert>
+
+	<select id="findPatternCache" resultType="com.example.unbind.domain.PatternInsightCache">
+		SELECT user_id, entry_count, completed_count, patterns_json
+		FROM pattern_insight_cache
+		WHERE user_id = #{userId}
+	</select>
+
+	<insert id="upsertPatternCache">
+		INSERT INTO pattern_insight_cache (user_id, entry_count, completed_count, patterns_json, computed_at)
+		VALUES (#{userId}, #{entryCount}, #{completedCount}, #{patternsJson}, CURRENT_TIMESTAMP)
+		ON CONFLICT (user_id) DO UPDATE SET
+			entry_count = EXCLUDED.entry_count,
+			completed_count = EXCLUDED.completed_count,
+			patterns_json = EXCLUDED.patterns_json,
+			computed_at = EXCLUDED.computed_at
+	</insert>
+
+</mapper>
