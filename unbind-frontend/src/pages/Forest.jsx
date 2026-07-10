@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "../api/axiosInstance";
 import { Sidebar } from "../components/layout/Sidebar";
 import { BookmarkIcon } from "../components/layout/NavIcons";
 import { KakaoAdFit } from "../components/KakaoAdFit";
+import { useKakaoShare } from "../hooks/useKakaoShare";
 import styles from "./Forest.module.css";
 
 const CATEGORIES = ["전체", "가족", "연인", "친구", "직장", "기타"];
@@ -29,6 +30,8 @@ const scrapHint = (count) => {
 };
 
 export const Forest = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { isAvailable: kakaoShareAvailable, shareKnot } = useKakaoShare();
   const [activeTag, setActiveTag] = useState("전체");
   const [searchInput, setSearchInput] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -80,6 +83,15 @@ export const Forest = () => {
     loadKnots(activeTag, searchTerm, 0, false);
   }, [activeTag, searchTerm]);
 
+  useEffect(() => {
+    const knotId = searchParams.get("knot");
+    if (!knotId) return;
+    axios
+      .get(`/forest/knots/${knotId}`)
+      .then((res) => openKnot(res.data))
+      .catch(() => {});
+  }, [searchParams]);
+
   const loadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -107,6 +119,21 @@ export const Forest = () => {
   const closeKnot = () => {
     setSelectedKnot(null);
     setReactions([]);
+    if (searchParams.get("knot")) {
+      setSearchParams((prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete("knot");
+        return next;
+      });
+    }
+  };
+
+  const handleShare = () => {
+    shareKnot({
+      situationSummary: selectedKnot.situationSummary,
+      actionText: selectedKnot.actionText,
+      knotId: selectedKnot.id,
+    });
   };
 
   const withdrawKnot = async () => {
@@ -347,24 +374,31 @@ export const Forest = () => {
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalTop}>
               <span className={styles.tagChip}>{selectedKnot.tag}</span>
-              {selectedKnot.mine ? (
-                <div className={styles.modalTopRight}>
-                  <span className={styles.mineBadge}>내 매듭</span>
-                  <button className={styles.withdrawBtn} onClick={withdrawKnot}>
-                    회수
+              <div className={styles.modalTopRight}>
+                {kakaoShareAvailable && (
+                  <button className={styles.withdrawBtn} onClick={handleShare}>
+                    카카오톡 공유
                   </button>
-                </div>
-              ) : (
-                <button
-                  className={`${styles.scrapBtnModal} ${
-                    selectedKnot.scrapped ? styles.scrapBtnActive : ""
-                  }`}
-                  onClick={(e) => toggleScrap(e, selectedKnot)}
-                >
-                  <BookmarkIcon filled={selectedKnot.scrapped} />
-                  {selectedKnot.scrapped ? "스크랩됨" : "스크랩"}
-                </button>
-              )}
+                )}
+                {selectedKnot.mine ? (
+                  <>
+                    <span className={styles.mineBadge}>내 매듭</span>
+                    <button className={styles.withdrawBtn} onClick={withdrawKnot}>
+                      회수
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className={`${styles.scrapBtnModal} ${
+                      selectedKnot.scrapped ? styles.scrapBtnActive : ""
+                    }`}
+                    onClick={(e) => toggleScrap(e, selectedKnot)}
+                  >
+                    <BookmarkIcon filled={selectedKnot.scrapped} />
+                    {selectedKnot.scrapped ? "스크랩됨" : "스크랩"}
+                  </button>
+                )}
+              </div>
             </div>
             <p className={styles.situation}>{selectedKnot.situationSummary}</p>
             <p className={styles.action}>

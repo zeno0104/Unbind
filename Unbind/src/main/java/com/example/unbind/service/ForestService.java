@@ -88,6 +88,17 @@ public class ForestService {
 		return knots;
 	}
 
+	public ForestKnot getKnotById(String email, Long forestKnotId) {
+		ForestKnot knot = forestKnotMapper.findById(forestKnotId);
+		if (knot == null) {
+			throw new AppException(HttpStatus.NOT_FOUND, "그 매듭을 찾을 수 없어요.");
+		}
+		User user = userMapper.findByEmail(email);
+		knot.setMine(user.getId().equals(knot.getUserId()));
+		knot.setScrapped(forestScrapMapper.findByUserAndKnot(user.getId(), forestKnotId) != null);
+		return knot;
+	}
+
 	public void withdrawKnot(String email, Long forestKnotId) {
 		ForestKnot knot = forestKnotMapper.findById(forestKnotId);
 		if (knot == null) {

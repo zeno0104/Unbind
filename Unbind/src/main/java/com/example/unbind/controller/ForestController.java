@@ -28,6 +28,11 @@ public class ForestController {
 		return forestService.getForestKnots(authentication.getName(), tag, q, page);
 	}
 
+	@GetMapping("/knots/{id}")
+	public ForestKnot getKnot(Authentication authentication, @PathVariable("id") Long id) {
+		return forestService.getKnotById(authentication.getName(), id);
+	}
+
 	@DeleteMapping("/knots/{id}")
 	public void withdrawKnot(Authentication authentication, @PathVariable("id") Long id) {
 		forestService.withdrawKnot(authentication.getName(), id);
