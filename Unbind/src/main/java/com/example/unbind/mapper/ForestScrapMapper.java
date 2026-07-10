@@ -14,6 +14,8 @@ public interface ForestScrapMapper {
 
 	void deleteByForestKnotId(@Param("forestKnotId") Long forestKnotId);
 
+	void deleteByEntryId(@Param("entryId") Long entryId);
+
 	void updateMemo(@Param("id") Long id, @Param("memo") String memo);
 
 	ForestScrap findByUserAndKnot(@Param("userId") Long userId, @Param("forestKnotId") Long forestKnotId);

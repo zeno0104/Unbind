@@ -6,10 +6,12 @@ export const JournalDetailModal = ({
   entryId,
   onClose,
   onStartConversation,
+  onDeleted,
 }) => {
   const [turns, setTurns] = useState([]);
   const [actionItem, setActionItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
   const FeedbackPicker = ({ entryId, onDone }) => {
     const [done, setDone] = useState(false);
 
@@ -58,6 +60,18 @@ export const JournalDetailModal = ({
     setActionItem((prev) => ({ ...prev, isCompleted: 1 }));
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm("이 기록을 삭제할까요? 되돌릴 수 없어요.")) return;
+    setDeleting(true);
+    try {
+      await axios.delete(`/entries/${entryId}`);
+      onDeleted?.(entryId);
+      onClose();
+    } catch {
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
@@ -75,6 +89,13 @@ export const JournalDetailModal = ({
               onClick={() => onStartConversation(entryId)}
             >
               대화 시작하기
+            </button>
+            <button
+              className={styles.deleteBtn}
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              {deleting ? "삭제 중..." : "이 기록 삭제하기"}
             </button>
           </div>
         ) : (
@@ -123,6 +144,14 @@ export const JournalDetailModal = ({
                 </div>
               </div>
             )}
+
+            <button
+              className={styles.deleteBtn}
+              onClick={handleDelete}
+              disabled={deleting}
+            >
+              {deleting ? "삭제 중..." : "이 기록 삭제하기"}
+            </button>
           </>
         )}
       </div>

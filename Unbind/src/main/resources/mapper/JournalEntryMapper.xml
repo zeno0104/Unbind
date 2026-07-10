@@ -40,6 +40,10 @@
 		ORDER BY relationship_tag
 	</select>
 
+	<delete id="deleteById">
+		DELETE FROM journal_entry WHERE id = #{id}
+	</delete>
+
 	<delete id="deleteAllByUserId">
 		DELETE FROM journal_entry WHERE user_id = #{userId}
 	</delete>

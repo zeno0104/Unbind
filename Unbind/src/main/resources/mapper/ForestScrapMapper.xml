@@ -20,6 +20,15 @@
 		DELETE FROM forest_scrap WHERE forest_knot_id = #{forestKnotId}
 	</delete>
 
+	<delete id="deleteByEntryId">
+		DELETE FROM forest_scrap
+		WHERE forest_knot_id IN (
+			SELECT id FROM forest_knot WHERE action_item_id IN (
+				SELECT id FROM action_item WHERE entry_id = #{entryId}
+			)
+		)
+	</delete>
+
 	<delete id="deleteAllByUserId">
 		DELETE FROM forest_scrap
 		WHERE user_id = #{userId}

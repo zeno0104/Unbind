@@ -18,5 +18,7 @@ public interface JournalEntryMapper {
 
 	List<String> findDistinctTagsByUserId(Long userId);
 
+	void deleteById(@Param("id") Long id);
+
 	void deleteAllByUserId(@Param("userId") Long userId);
 }

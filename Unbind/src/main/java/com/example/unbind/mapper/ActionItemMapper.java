@@ -20,5 +20,7 @@ public interface ActionItemMapper {
 
 	List<ActionItem> findAllByUserId(Long userId);
 
+	void deleteByEntryId(@Param("entryId") Long entryId);
+
 	void deleteAllByUserId(@Param("userId") Long userId);
 }

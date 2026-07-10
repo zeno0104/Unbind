@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +43,10 @@ public class JournalEntryController {
 	@GetMapping("/tags")
 	public List<String> getTags(Authentication authentication) {
 		return service.getTags(authentication.getName());
+	}
+
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable("id") Long id, Authentication authentication) {
+		service.delete(id, authentication.getName());
 	}
 }
