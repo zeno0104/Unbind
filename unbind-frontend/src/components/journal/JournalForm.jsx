@@ -9,6 +9,7 @@ export const JournalForm = () => {
   const [tagMode, setTagMode] = useState("none"); // "none" | "existing" | "new"
   const [selectedTag, setSelectedTag] = useState(null);
   const [newTag, setNewTag] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,7 +37,11 @@ export const JournalForm = () => {
   };
 
   const handleSubmit = async () => {
-    if (!text.trim()) return;
+    if (!text.trim()) {
+      setError("어떤 일이 있었는지 적어주세요.");
+      return;
+    }
+    setError("");
     const relationshipTag =
       tagMode === "existing"
         ? selectedTag
@@ -63,10 +68,14 @@ export const JournalForm = () => {
         <textarea
           className={styles.textarea}
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => {
+            setText(e.target.value);
+            if (error) setError("");
+          }}
           placeholder="그 사람과 있었던 일, 서운하거나 답답했던 마음을 편하게 적어보세요..."
           rows={4}
         />
+        {error && <p className={styles.errorText}>{error}</p>}
 
         <p className={styles.tagSectionLabel}>누구와의 일인가요?</p>
         <div className={styles.tagChipRow}>
