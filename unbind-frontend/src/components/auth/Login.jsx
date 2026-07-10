@@ -79,6 +79,12 @@ export const Login = ({ onLoginSuccess }) => {
           </button>
         </form>
 
+        <p className={styles.switchText}>
+          <Link to="/forgot-password" className={styles.switchLink}>
+            비밀번호를 잊으셨나요?
+          </Link>
+        </p>
+
         <div className={styles.divider}>
           <span>또는</span>
         </div>
