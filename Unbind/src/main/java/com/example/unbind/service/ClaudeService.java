@@ -18,6 +18,9 @@ public class ClaudeService {
 	private final RestClient restClient;
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
+	private static final String MODEL_SONNET = "claude-sonnet-4-6";
+	private static final String MODEL_HAIKU = "claude-haiku-4-5";
+
 	private static final String HONORIFIC_RULE = """
 
 			말투 규칙(모든 응답에 반드시 적용):
@@ -34,20 +37,25 @@ public class ClaudeService {
 			- 배경 설명이나 되짚기 없이, 공감 다음에 바로 질문하세요.
 			- 공감은 1~2문장으로, 사용자가 느꼈을 감정을 구체적으로 짚어주며 진심으로 들어주는 느낌을 주세요.
 			  다만 조언이나 해석은 하지 마세요 — 감정을 알아봐주는 것까지만입니다.
-			- 총 2번만 질문합니다.
+			- 총 1번만 질문합니다.
 			- 이모지 쓰지 마세요.
 
 			거리두기 판단(자동으로 적용, 사용자에게 설명하지 마세요):
 			사용자의 말에서 분노·억울함·배신감·수치심 같은 감정이 격하게 드러나거나 같은 생각을 반복해서
-			곱씹는(반추) 기색이 보이면, 질문을 1인칭("나는") 대신 "그 상황을 친구가 똑같이 겪었다면",
-			"밖에서 지켜보는 사람이라면" 같은 2인칭·3인칭 거리두기 문장으로 던지세요.
+			곱씹는(반추) 기색이 보이면, 질문의 주어만 1인칭("나는") 대신 "친구가 똑같이 겪었다면",
+			"밖에서 지켜보는 사람이라면" 같은 2인칭·3인칭 주어로 바꿔서 던지세요.
+			단, 질문이 묻는 대상은 항상 "내가(또는 그 자리의 누군가가) 그 상황에서 무엇을 할 수 있었는지/없었는지"
+			여야 합니다. 절대로 "상대방(친구·가족·직장 사람 등)이 원래 다르게 행동했다면", "그 사람이 처음부터
+			그런 사람이 아니었다면" 같이 상대방의 성격이나 행동의 가정을 묻지 마세요 — 그건 이 단계의 목표(내가
+			어찌할 수 없었던 부분을 알아차리기)와 무관한 질문입니다. 주어만 3인칭으로 거리를 두고, 질문의 내용은
+			1인칭 버전과 똑같이 "그 자리에 있었어도 달리 할 수 있었을까"를 물어야 합니다.
 			감정이 격하지 않다면 평소처럼 1인칭 질문을 하세요.
 
 			무의미한 입력 처리(자동으로 적용, 사용자에게 설명하지 마세요):
 			사용자의 메시지가 오타·의미 없는 문자 나열이거나, 관계에서 겪은 일과 전혀 관계없는 이야기라면
 			(예: 신체 활동, 날씨, 무관한 잡담 등), 분석 질문을 하지 말고 "어떤 관계에서 있었던 일인지
 			조금 더 편하게 들려주실 수 있을까요?" 같은 취지로 부드럽게 다시 여쭤보세요.
-			이것도 질문 횟수 2번 중 하나로 셉니다.
+			이것도 질문 횟수 1번에 포함됩니다.
 			""" + HONORIFIC_RULE;
 
 	private static final String TRANSITION_PROMPT = """
@@ -155,7 +163,11 @@ public class ClaudeService {
 	}
 
 	private String callClaude(String system, List<ClaudeRequest.Message> messages) {
-		ClaudeRequest request = new ClaudeRequest("claude-sonnet-4-6", 600, system, messages);
+		return callClaude(system, messages, MODEL_SONNET);
+	}
+
+	private String callClaude(String system, List<ClaudeRequest.Message> messages, String model) {
+		ClaudeRequest request = new ClaudeRequest(model, 600, system, messages);
 		String responseBody = restClient.post().body(request).retrieve().body(String.class);
 		try {
 			JsonNode root = objectMapper.readTree(responseBody);
@@ -198,17 +210,13 @@ public class ClaudeService {
 		return callClaude(PHASE1_PROMPT, List.of(new ClaudeRequest.Message("user", prompt)));
 	}
 
-	public String continuePhase1(List<ConversationTurn> history) {
-		return callClaude(PHASE1_PROMPT, toMessages(history));
-	}
-
 	public String transition(List<ConversationTurn> history) {
-		return callClaude(TRANSITION_PROMPT, toMessages(history));
+		return callClaude(TRANSITION_PROMPT, toMessages(history), MODEL_HAIKU);
 	}
 
 	public String startPhase2(List<ConversationTurn> history) {
 		List<ClaudeRequest.Message> messages = toMessagesEndingWithUser(history, "(다음 단계로 넘어갑니다)");
-		return callClaude(PHASE2_OPEN_PROMPT, messages);
+		return callClaude(PHASE2_OPEN_PROMPT, messages, MODEL_HAIKU);
 	}
 
 	public PhaseReply continuePhase2(List<ConversationTurn> history) {
@@ -257,14 +265,15 @@ public class ClaudeService {
 
 	public ForestModerationResult moderateForForest(String situationText, String actionText) {
 		String prompt = "상황: \"%s\"\n다짐: \"%s\"".formatted(situationText, actionText);
-		String responseText = callClaude(FOREST_MODERATION_PROMPT, List.of(new ClaudeRequest.Message("user", prompt)));
+		String responseText = callClaude(FOREST_MODERATION_PROMPT, List.of(new ClaudeRequest.Message("user", prompt)),
+				MODEL_HAIKU);
 		return parseJson(responseText, ForestModerationResult.class);
 	}
 
 	public ReactionModerationResult moderateReaction(String actionText) {
 		String prompt = "답글: \"%s\"".formatted(actionText);
 		String responseText = callClaude(REACTION_MODERATION_PROMPT,
-				List.of(new ClaudeRequest.Message("user", prompt)));
+				List.of(new ClaudeRequest.Message("user", prompt)), MODEL_HAIKU);
 		return parseJson(responseText, ReactionModerationResult.class);
 	}
 }
