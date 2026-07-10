@@ -214,6 +214,18 @@
   cursor: pointer;
 }
 
+.deleteAccountBtn {
+  background: transparent;
+  border: 0.5px solid #b3452f;
+  color: #b3452f;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
 @media (max-width: 768px) {
   .content {
     padding: 24px 20px 90px;

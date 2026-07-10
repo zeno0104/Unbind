@@ -11,6 +11,13 @@ const formatDate = (dateString) => {
   return new Date(dateString).toISOString().slice(0, 10);
 };
 
+const urlBase64ToUint8Array = (base64String) => {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = atob(base64);
+  return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
+};
+
 export const MyPage = () => {
   const [user, setUser] = useState(null);
   const [nickname, setNickname] = useState("");
@@ -22,12 +29,66 @@ export const MyPage = () => {
   const [scrapTag, setScrapTag] = useState("전체");
   const [savingScrapId, setSavingScrapId] = useState(null);
 
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [pushSupported, setPushSupported] = useState(false);
+  const [pushLoading, setPushLoading] = useState(false);
+
   useEffect(() => {
     axios.get("/users/me").then((res) => {
       setUser(res.data);
       setNickname(res.data.name || "");
     });
   }, []);
+
+  useEffect(() => {
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+      return;
+    }
+    setPushSupported(true);
+    navigator.serviceWorker.ready.then(async (registration) => {
+      const subscription = await registration.pushManager.getSubscription();
+      setPushEnabled(!!subscription);
+    });
+  }, []);
+
+  const handleTogglePush = async () => {
+    setPushLoading(true);
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      if (pushEnabled) {
+        const subscription = await registration.pushManager.getSubscription();
+        if (subscription) {
+          await axios.delete("/push/subscribe", {
+            data: { endpoint: subscription.endpoint },
+          });
+          await subscription.unsubscribe();
+        }
+        setPushEnabled(false);
+      } else {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          setPushLoading(false);
+          return;
+        }
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(import.meta.env.VITE_VAPID_PUBLIC_KEY),
+        });
+        const key = subscription.toJSON().keys;
+        await axios.post("/push/subscribe", {
+          endpoint: subscription.endpoint,
+          p256dh: key.p256dh,
+          auth: key.auth,
+        });
+        setPushEnabled(true);
+      }
+    } catch {
+      setMessage("알림 설정을 바꾸지 못했어요.");
+      setIsError(true);
+    } finally {
+      setPushLoading(false);
+    }
+  };
 
   const loadScraps = (tag) => {
     setScrapsLoading(true);
@@ -86,6 +147,24 @@ export const MyPage = () => {
     const next = new Date(changed.getTime() + COOLDOWN_DAYS * 24 * 60 * 60 * 1000);
     return next > new Date() ? next : null;
   })();
+
+  const handleDeleteAccount = async () => {
+    if (
+      !window.confirm(
+        "정말 계정을 삭제하시겠어요? 작성한 기록, 다짐, 매듭숲 게시물이 모두 사라지고 되돌릴 수 없어요."
+      )
+    ) {
+      return;
+    }
+    try {
+      await axios.delete("/users/me");
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    } catch (err) {
+      setMessage(err.response?.data?.message || "계정 삭제에 실패했어요.");
+      setIsError(true);
+    }
+  };
 
   const handleSave = async () => {
     setMessage("");
@@ -214,6 +293,36 @@ export const MyPage = () => {
               ))}
             </div>
           )}
+        </div>
+
+        {pushSupported && (
+          <div className={styles.card} style={{ marginTop: 24 }}>
+            <p className={styles.label}>다짐 알림</p>
+            <div className={styles.editRow}>
+              <p className={styles.staticValue} style={{ flex: 1 }}>
+                {pushEnabled
+                  ? "아직 풀지 않은 매듭을 알려드려요"
+                  : "아직 풀지 않은 매듭이 있으면 알려드릴까요?"}
+              </p>
+              <button
+                className={styles.saveBtn}
+                onClick={handleTogglePush}
+                disabled={pushLoading}
+              >
+                {pushEnabled ? "알림 끄기" : "알림 받기"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div className={styles.card} style={{ marginTop: 24 }}>
+          <p className={styles.label}>계정 관리</p>
+          <p className={styles.hint}>
+            계정을 삭제하면 모든 기록과 다짐, 매듭숲 게시물이 영구히 삭제돼요.
+          </p>
+          <button className={styles.deleteAccountBtn} onClick={handleDeleteAccount}>
+            계정 삭제
+          </button>
         </div>
       </div>
     </div>
