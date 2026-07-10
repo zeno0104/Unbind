@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import axios from "../api/axiosInstance";
 import { Sidebar } from "../components/layout/Sidebar";
+import { KakaoAdFit } from "../components/KakaoAdFit";
 import styles from "./KnotRoom.module.css";
 
 const feedbackOptions = [
@@ -267,6 +268,8 @@ export const KnotRoom = () => {
         <p className={styles.footer}>
           완료한 다짐 {done.length}개 · 아직 쥐고 있는 매듭 {active.length}개
         </p>
+
+        <KakaoAdFit adUnit={import.meta.env.VITE_ADFIT_UNIT_ROOM} />
 
         {selected && (
           <div className={styles.overlay} onClick={() => setSelected(null)}>
