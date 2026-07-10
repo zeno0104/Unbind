@@ -42,11 +42,10 @@ export const BookmarkIcon = ({ filled = false }) => (
   </svg>
 );
 
-export const MoreIcon = () => (
+export const MyIcon = () => (
   <svg {...base}>
-    <circle cx="5" cy="12" r="1.6" fill="currentColor" stroke="none" />
-    <circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none" />
-    <circle cx="19" cy="12" r="1.6" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="8" r="3.5" />
+    <path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6" />
   </svg>
 );
 

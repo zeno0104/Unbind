@@ -10,7 +10,7 @@ import { Calendar } from "./pages/Calendar";
 import { Onboarding } from "./pages/Onboarding";
 import { Landing } from "./pages/Landing";
 import { MyPage } from "./pages/MyPage";
-import { Feedback } from "./pages/Feedback";
+import { MyScraps } from "./pages/MyScraps";
 import { Forest } from "./pages/Forest";
 import { OAuthCallback } from "./pages/OAuthCallback";
 import { PrivacyPolicy } from "./pages/PrivacyPolicy";
@@ -84,8 +84,8 @@ function App() {
         element={token ? <MyPage /> : <Navigate to="/login" />}
       />
       <Route
-        path="/feedback"
-        element={token ? <Feedback /> : <Navigate to="/login" />}
+        path="/mypage/scraps"
+        element={token ? <MyScraps /> : <Navigate to="/login" />}
       />
       <Route
         path="/forest"

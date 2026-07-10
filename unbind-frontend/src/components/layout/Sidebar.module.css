@@ -6,7 +6,6 @@
   padding: 24px 16px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100vh;
   position: sticky;
   top: 0;
@@ -59,54 +58,6 @@
   white-space: nowrap;
 }
 
-.bottom {
-  display: flex;
-  flex-direction: column;
-}
-
-.divider {
-  height: 0.5px;
-  background: var(--border-soft);
-  margin: 0 12px 12px;
-}
-
-.logoutBtn {
-  background: transparent;
-  border: none;
-  color: var(--text-muted);
-  font-size: 15px;
-  text-align: left;
-  padding: 10px 12px;
-  cursor: pointer;
-}
-
-.accountLink {
-  text-decoration: none;
-  color: var(--text-muted);
-  font-size: 15px;
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
-}
-.accountLink.active {
-  color: var(--accent-sage);
-}
-
-.moreTrigger {
-  display: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-.moreBackdrop {
-  display: none;
-}
-
-.moreSheet {
-  display: none;
-}
-
 @media (max-width: 768px) {
   .nav {
     width: 100%;
@@ -114,9 +65,6 @@
     position: fixed;
     bottom: 0;
     top: auto;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
     padding: 10px 16px;
     border-right: none;
     border-top: 0.5px solid var(--border-soft);
@@ -125,7 +73,9 @@
   .top {
     flex-direction: row;
     align-items: center;
-    gap: 16px;
+    justify-content: space-around;
+    gap: 0;
+    width: 100%;
   }
   .brand {
     display: none;
@@ -138,67 +88,5 @@
   }
   .navLabel {
     display: none;
-  }
-  .secondaryItem {
-    display: none;
-  }
-  .moreTrigger {
-    display: flex;
-  }
-  .bottom {
-    display: none;
-  }
-
-  .moreBackdrop {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 55;
-  }
-
-  .moreSheet {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    bottom: 68px;
-    left: 16px;
-    right: 16px;
-    background: var(--bg-surface);
-    border: 0.5px solid var(--border-soft);
-    border-radius: 16px;
-    padding: 8px;
-    z-index: 60;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  }
-
-  .moreItem,
-  .moreItemBtn {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
-    color: var(--text-primary);
-    font-size: 15px;
-    text-decoration: none;
-    background: transparent;
-    border: none;
-    text-align: left;
-    cursor: pointer;
-    border-radius: 10px;
-    font-family: inherit;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .moreItem:active,
-  .moreItemBtn:active {
-    background: var(--bg-surface-2);
-  }
-
-  .moreDivider {
-    height: 0.5px;
-    background: var(--border-soft);
-    margin: 6px 4px;
   }
 }

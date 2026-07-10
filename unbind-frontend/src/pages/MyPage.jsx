@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "../api/axiosInstance";
 import { Sidebar } from "../components/layout/Sidebar";
+import { KakaoAdFit } from "../components/KakaoAdFit";
 import styles from "./MyPage.module.css";
 
 const COOLDOWN_DAYS = 30;
-const SCRAP_CATEGORIES = ["전체", "가족", "연인", "친구", "직장", "기타"];
 
-const formatDate = (dateString) => {
+const formatDateTime = (dateString) => {
   if (!dateString) return "";
-  return new Date(dateString).toISOString().slice(0, 10);
+  return new Date(dateString).toISOString().slice(0, 16).replace("T", " ");
 };
 
 const urlBase64ToUint8Array = (base64String) => {
@@ -24,20 +25,32 @@ export const MyPage = () => {
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
-  const [scraps, setScraps] = useState([]);
-  const [scrapsLoading, setScrapsLoading] = useState(true);
-  const [scrapTag, setScrapTag] = useState("전체");
-  const [savingScrapId, setSavingScrapId] = useState(null);
+  const [scrapCount, setScrapCount] = useState(null);
 
   const [pushEnabled, setPushEnabled] = useState(false);
   const [pushSupported, setPushSupported] = useState(false);
   const [pushLoading, setPushLoading] = useState(false);
 
+  const [feedbackContent, setFeedbackContent] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [feedbackIsError, setFeedbackIsError] = useState(false);
+  const [feedbackSent, setFeedbackSent] = useState(false);
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [feedbackBoardLoading, setFeedbackBoardLoading] = useState(false);
+
   useEffect(() => {
     axios.get("/users/me").then((res) => {
       setUser(res.data);
       setNickname(res.data.name || "");
+      if (res.data.admin) {
+        setFeedbackBoardLoading(true);
+        axios
+          .get("/feedback")
+          .then((r) => setFeedbackList(r.data))
+          .finally(() => setFeedbackBoardLoading(false));
+      }
     });
+    axios.get("/forest/scraps").then((res) => setScrapCount(res.data.length));
   }, []);
 
   useEffect(() => {
@@ -52,10 +65,21 @@ export const MyPage = () => {
   }, []);
 
   const handleTogglePush = async () => {
+    setMessage("");
+    setIsError(false);
+
+    if (!pushEnabled && Notification.permission === "denied") {
+      setMessage(
+        "알림이 차단되어 있어요. 주소창의 자물쇠(사이트 정보) 아이콘에서 알림 권한을 허용으로 바꾼 뒤 다시 시도해주세요."
+      );
+      setIsError(true);
+      return;
+    }
+
     setPushLoading(true);
     try {
-      const registration = await navigator.serviceWorker.ready;
       if (pushEnabled) {
+        const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.getSubscription();
         if (subscription) {
           await axios.delete("/push/subscribe", {
@@ -67,9 +91,12 @@ export const MyPage = () => {
       } else {
         const permission = await Notification.requestPermission();
         if (permission !== "granted") {
+          setMessage("알림을 받으려면 권한을 허용해주세요.");
+          setIsError(true);
           setPushLoading(false);
           return;
         }
+        const registration = await navigator.serviceWorker.ready;
         const subscription = await registration.pushManager.subscribe({
           userVisibleOnly: true,
           applicationServerKey: urlBase64ToUint8Array(import.meta.env.VITE_VAPID_PUBLIC_KEY),
@@ -87,57 +114,6 @@ export const MyPage = () => {
       setIsError(true);
     } finally {
       setPushLoading(false);
-    }
-  };
-
-  const loadScraps = (tag) => {
-    setScrapsLoading(true);
-    axios
-      .get("/forest/scraps", { params: tag === "전체" ? {} : { tag } })
-      .then((res) => setScraps(res.data.map((s) => ({ ...s, savedMessage: "" }))))
-      .finally(() => setScrapsLoading(false));
-  };
-
-  useEffect(() => {
-    loadScraps(scrapTag);
-  }, [scrapTag]);
-
-  const updateMemoText = (forestKnotId, value) => {
-    setScraps((prev) =>
-      prev.map((s) =>
-        s.forestKnotId === forestKnotId ? { ...s, memo: value, savedMessage: "" } : s
-      )
-    );
-  };
-
-  const saveScrapMemo = async (scrap) => {
-    setSavingScrapId(scrap.forestKnotId);
-    try {
-      await axios.put(`/forest/knots/${scrap.forestKnotId}/scrap/memo`, { memo: scrap.memo });
-      setScraps((prev) =>
-        prev.map((s) =>
-          s.forestKnotId === scrap.forestKnotId ? { ...s, savedMessage: "저장했어요." } : s
-        )
-      );
-    } catch (err) {
-      setScraps((prev) =>
-        prev.map((s) =>
-          s.forestKnotId === scrap.forestKnotId
-            ? { ...s, savedMessage: err.response?.data?.message || "저장에 실패했어요." }
-            : s
-        )
-      );
-    } finally {
-      setSavingScrapId(null);
-    }
-  };
-
-  const removeScrap = async (scrap) => {
-    setScraps((prev) => prev.filter((s) => s.forestKnotId !== scrap.forestKnotId));
-    try {
-      await axios.delete(`/forest/knots/${scrap.forestKnotId}/scrap`);
-    } catch {
-      loadScraps(scrapTag);
     }
   };
 
@@ -164,6 +140,29 @@ export const MyPage = () => {
       setMessage(err.response?.data?.message || "계정 삭제에 실패했어요.");
       setIsError(true);
     }
+  };
+
+  const handleSendFeedback = async () => {
+    setFeedbackMessage("");
+    setFeedbackIsError(false);
+    if (!feedbackContent.trim()) {
+      setFeedbackMessage("피드백 내용을 입력해주세요.");
+      setFeedbackIsError(true);
+      return;
+    }
+    try {
+      await axios.post("/feedback", { content: feedbackContent.trim() });
+      setFeedbackSent(true);
+      setFeedbackContent("");
+    } catch (err) {
+      setFeedbackMessage(err.response?.data?.message || "전송에 실패했어요.");
+      setFeedbackIsError(true);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
   };
 
   const handleSave = async () => {
@@ -233,79 +232,34 @@ export const MyPage = () => {
           )}
         </div>
 
-        <div className={styles.scrapSection}>
-          <p className={styles.sectionTitle}>스크랩한 매듭</p>
-
-          <div className={styles.filterRow}>
-            {SCRAP_CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                className={`${styles.filterChip} ${
-                  scrapTag === cat ? styles.filterChipActive : ""
-                }`}
-                onClick={() => setScrapTag(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {scrapsLoading ? (
-            <p className={styles.hint}>불러오는 중...</p>
-          ) : scraps.length === 0 ? (
-            <p className={styles.hint}>아직 스크랩한 매듭이 없어요.</p>
-          ) : (
-            <div className={styles.scrapList}>
-              {scraps.map((scrap) => (
-                <div key={scrap.id} className={styles.scrapCard}>
-                  <div className={styles.scrapTop}>
-                    <span className={styles.tagChip}>{scrap.tag}</span>
-                    <span className={styles.time}>{formatDate(scrap.knotCreatedAt)}</span>
-                  </div>
-                  <p className={styles.scrapSituation}>{scrap.situationSummary}</p>
-                  <p className={styles.scrapAction}>✦ {scrap.actionText}</p>
-
-                  <textarea
-                    className={styles.memoTextarea}
-                    value={scrap.memo || ""}
-                    onChange={(e) => updateMemoText(scrap.forestKnotId, e.target.value)}
-                    placeholder="이 매듭을 보고 떠오른 생각을 적어두세요..."
-                    rows={2}
-                    maxLength={300}
-                  />
-
-                  <div className={styles.scrapActions}>
-                    <button
-                      className={styles.memoSaveBtn}
-                      onClick={() => saveScrapMemo(scrap)}
-                      disabled={savingScrapId === scrap.forestKnotId}
-                    >
-                      {savingScrapId === scrap.forestKnotId ? "저장 중..." : "메모 저장"}
-                    </button>
-                    <button className={styles.unscrapBtn} onClick={() => removeScrap(scrap)}>
-                      스크랩 취소
-                    </button>
-                  </div>
-                  {scrap.savedMessage && (
-                    <p className={styles.successText}>{scrap.savedMessage}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <Link to="/mypage/scraps" className={styles.linkCard}>
+          <span>스크랩한 매듭</span>
+          <span className={styles.linkCardRight}>
+            {scrapCount !== null && (
+              <span className={styles.linkCardCount}>{scrapCount}개</span>
+            )}
+            <span className={styles.linkCardArrow}>›</span>
+          </span>
+        </Link>
 
         {pushSupported && (
           <div className={styles.card} style={{ marginTop: 24 }}>
-            <p className={styles.label}>다짐 알림</p>
-            <div className={styles.editRow}>
+            <div className={styles.pushHeader}>
+              <p className={styles.label} style={{ margin: 0 }}>다짐 알림</p>
+              <span
+                className={pushEnabled ? styles.pushBadgeOn : styles.pushBadgeOff}
+              >
+                {pushEnabled ? "켜짐" : "꺼짐"}
+              </span>
+            </div>
+            <div className={styles.editRow} style={{ marginTop: 10 }}>
               <p className={styles.staticValue} style={{ flex: 1 }}>
                 {pushEnabled
-                  ? "아직 풀지 않은 매듭을 알려드려요"
-                  : "아직 풀지 않은 매듭이 있으면 알려드릴까요?"}
+                  ? "아직 풀지 않은 매듭을 알려드려요. 저녁 8시쯤 알림이 와요."
+                  : "아직 풀지 않은 매듭이 있으면 저녁에 알려드릴까요?"}
               </p>
               <button
-                className={styles.saveBtn}
+                className={pushEnabled ? styles.toggleOffBtn : styles.saveBtn}
                 onClick={handleTogglePush}
                 disabled={pushLoading}
               >
@@ -315,6 +269,68 @@ export const MyPage = () => {
           </div>
         )}
 
+        <div className={styles.scrapSection}>
+          <p className={styles.sectionTitle}>피드백 보내기</p>
+
+          {user.admin ? (
+            <div className={styles.card}>
+              {feedbackBoardLoading ? (
+                <p className={styles.hint}>불러오는 중...</p>
+              ) : feedbackList.length === 0 ? (
+                <p className={styles.hint}>아직 받은 피드백이 없어요.</p>
+              ) : (
+                <div className={styles.boardList}>
+                  {feedbackList.map((f) => (
+                    <div key={f.id} className={styles.boardItem}>
+                      <div className={styles.boardItemTop}>
+                        <span className={styles.boardEmail}>
+                          {f.userName} · {f.userEmail}
+                        </span>
+                        <span className={styles.boardDate}>
+                          {formatDateTime(f.createdAt)}
+                        </span>
+                      </div>
+                      <p className={styles.boardContent}>{f.content}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className={styles.card}>
+              {feedbackSent ? (
+                <p className={styles.thanks}>
+                  소중한 의견 감사해요. 잘 읽고 반영해볼게요.
+                </p>
+              ) : (
+                <>
+                  <textarea
+                    className={styles.textarea}
+                    value={feedbackContent}
+                    onChange={(e) => setFeedbackContent(e.target.value)}
+                    placeholder="불편했던 점, 좋았던 점, 있었으면 하는 기능을 편하게 남겨주세요..."
+                    rows={5}
+                  />
+                  {feedbackMessage && (
+                    <p
+                      className={
+                        feedbackIsError ? styles.errorText : styles.successText
+                      }
+                    >
+                      {feedbackMessage}
+                    </p>
+                  )}
+                  <button className={styles.saveBtn} style={{ width: "100%" }} onClick={handleSendFeedback}>
+                    보내기
+                  </button>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+
+        <KakaoAdFit adUnit={import.meta.env.VITE_ADFIT_UNIT_MYPAGE} />
+
         <div className={styles.card} style={{ marginTop: 24 }}>
           <p className={styles.label}>계정 관리</p>
           <p className={styles.hint}>
@@ -322,6 +338,15 @@ export const MyPage = () => {
           </p>
           <button className={styles.deleteAccountBtn} onClick={handleDeleteAccount}>
             계정 삭제
+          </button>
+        </div>
+
+        <div className={styles.footerRow}>
+          <Link to="/privacy" className={styles.footerLink}>
+            개인정보처리방침
+          </Link>
+          <button className={styles.logoutBtn} onClick={handleLogout}>
+            로그아웃
           </button>
         </div>
       </div>
