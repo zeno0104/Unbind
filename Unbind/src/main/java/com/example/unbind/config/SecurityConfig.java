@@ -20,6 +20,7 @@ public class SecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 	private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+	private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
 	@Value("${cors.allowed-origins}")
 	private String allowedOrigins;
@@ -32,6 +33,7 @@ public class SecurityConfig {
 								"/oauth2/**", "/login/oauth2/**")
 						.permitAll()
 						.anyRequest().authenticated())
+				.exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(restAuthenticationEntryPoint))
 				.oauth2Login(oauth2 -> oauth2.successHandler(oAuth2LoginSuccessHandler)
 						.failureHandler(oAuth2LoginFailureHandler))
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
