@@ -12,4 +12,6 @@ public interface ConversationTurnMapper {
 	List<ConversationTurn> findByEntryId(Long entryId);
 
 	void updateStepType(@Param("id") Long id, @Param("stepType") String stepType);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

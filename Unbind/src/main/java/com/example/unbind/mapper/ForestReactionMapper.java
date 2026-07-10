@@ -19,4 +19,6 @@ public interface ForestReactionMapper {
 	void delete(@Param("id") Long id);
 
 	void deleteByForestKnotId(@Param("forestKnotId") Long forestKnotId);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

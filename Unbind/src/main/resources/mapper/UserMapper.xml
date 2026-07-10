@@ -19,4 +19,12 @@
 	<update id="updateName">
 		UPDATE users SET name = #{name}, name_changed_at = CURRENT_TIMESTAMP WHERE id = #{id}
 	</update>
+
+	<update id="updatePassword">
+		UPDATE users SET password = #{password} WHERE id = #{id}
+	</update>
+
+	<delete id="deleteById">
+		DELETE FROM users WHERE id = #{id}
+	</delete>
 </mapper>

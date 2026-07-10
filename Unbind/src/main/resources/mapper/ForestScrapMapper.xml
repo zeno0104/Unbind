@@ -20,6 +20,12 @@
 		DELETE FROM forest_scrap WHERE forest_knot_id = #{forestKnotId}
 	</delete>
 
+	<delete id="deleteAllByUserId">
+		DELETE FROM forest_scrap
+		WHERE user_id = #{userId}
+		OR forest_knot_id IN (SELECT id FROM forest_knot WHERE user_id = #{userId})
+	</delete>
+
 	<update id="updateMemo">
 		UPDATE forest_scrap SET memo = #{memo, jdbcType=VARCHAR}, updated_at = CURRENT_TIMESTAMP WHERE id = #{id}
 	</update>

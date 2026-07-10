@@ -3,6 +3,7 @@ package com.example.unbind.controller;
 import com.example.unbind.domain.User;
 import com.example.unbind.exception.AppException;
 import com.example.unbind.mapper.UserMapper;
+import com.example.unbind.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ public class UserController {
 	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	private final UserMapper userMapper;
+	private final UserService userService;
 
 	@Value("${admin.email}")
 	private String adminEmail;
@@ -53,6 +55,11 @@ public class UserController {
 		user.setName(trimmed);
 		user.setNameChangedAt(LocalDateTime.now());
 		return user;
+	}
+
+	@DeleteMapping("/me")
+	public void deleteAccount(Authentication authentication) {
+		userService.deleteAccount(authentication.getName());
 	}
 
 	@Data

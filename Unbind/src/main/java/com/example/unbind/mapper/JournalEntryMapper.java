@@ -3,6 +3,7 @@ package com.example.unbind.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.unbind.domain.JournalEntry;
 import com.example.unbind.domain.User;
@@ -16,4 +17,6 @@ public interface JournalEntryMapper {
 	List<JournalEntry> findAllByUserId(Long userId);
 
 	List<String> findDistinctTagsByUserId(Long userId);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

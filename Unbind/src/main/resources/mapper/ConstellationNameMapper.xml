@@ -17,4 +17,8 @@
 		ON CONFLICT (user_id, tag) DO UPDATE SET name = EXCLUDED.name
 	</update>
 
+	<delete id="deleteAllByUserId">
+		DELETE FROM constellation WHERE user_id = #{userId}
+	</delete>
+
 </mapper>

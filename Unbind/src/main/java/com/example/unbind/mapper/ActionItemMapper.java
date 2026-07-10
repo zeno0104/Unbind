@@ -19,4 +19,6 @@ public interface ActionItemMapper {
 	Map<String, Object> countStats(Long userId);
 
 	List<ActionItem> findAllByUserId(Long userId);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

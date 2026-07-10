@@ -19,4 +19,8 @@
 		ORDER BY f.created_at DESC
 	</select>
 
+	<delete id="deleteAllByUserId">
+		DELETE FROM feedback WHERE user_id = #{userId}
+	</delete>
+
 </mapper>

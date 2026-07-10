@@ -2,6 +2,7 @@ package com.example.unbind.mapper;
 
 import com.example.unbind.domain.Feedback;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface FeedbackMapper {
 	void insert(Feedback feedback);
 
 	List<Feedback> findAllWithUserEmail();
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

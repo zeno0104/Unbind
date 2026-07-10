@@ -46,4 +46,8 @@
 		DELETE FROM forest_knot WHERE id = #{id}
 	</delete>
 
+	<delete id="deleteAllByUserId">
+		DELETE FROM forest_knot WHERE user_id = #{userId}
+	</delete>
+
 </mapper>

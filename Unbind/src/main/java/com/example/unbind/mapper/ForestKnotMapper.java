@@ -18,4 +18,6 @@ public interface ForestKnotMapper {
 	ForestKnot findById(@Param("id") Long id);
 
 	void delete(@Param("id") Long id);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

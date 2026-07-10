@@ -21,4 +21,6 @@ public interface ForestScrapMapper {
 	List<Long> findKnotIdsByUserId(@Param("userId") Long userId);
 
 	List<ForestScrap> findAllByUser(@Param("userId") Long userId, @Param("tag") String tag);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

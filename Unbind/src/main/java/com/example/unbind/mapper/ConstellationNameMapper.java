@@ -11,4 +11,6 @@ public interface ConstellationNameMapper {
 	List<ConstellationName> findAllByUserId(Long userId);
 
 	void upsert(@Param("userId") Long userId, @Param("tag") String tag, @Param("name") String name);
+
+	void deleteAllByUserId(@Param("userId") Long userId);
 }

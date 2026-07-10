@@ -45,4 +45,9 @@
 		WHERE je.user_id = #{userId}
 		ORDER BY ai.id ASC
 	</select>
+
+	<delete id="deleteAllByUserId">
+		DELETE FROM action_item
+		WHERE entry_id IN (SELECT id FROM journal_entry WHERE user_id = #{userId})
+	</delete>
 </mapper>
