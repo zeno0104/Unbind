@@ -1,0 +1,8 @@
+KEYSTORE_SECRETS.local.txt
+*.keystore
+node_modules
+
+# build artifacts (regenerate via generate.cjs / gradlew)
+app-release*.apk
+app-release*.aab
+app-release*.apk.idsig
